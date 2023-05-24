@@ -5,7 +5,8 @@
         "DOTween.Modules",
         "UniTask",
         "Unity.TextMeshPro",
-        "ZBase.UnityScreenNavigator"
+        "ZBase.UnityScreenNavigator",
+        "ZBase.Foundation.Mvvm"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -14,6 +15,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.zbase.foundation.mvvm",
+            "expression": "",
+            "define": "ZBASE_FOUNDATION_MVVM"
+        }
+    ],
     "noEngineReferences": false
 }
