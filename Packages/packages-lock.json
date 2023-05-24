@@ -126,6 +126,14 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "com.zbase.foundation.mvvm": {
+      "version": "file:com.zbase.foundation.mvvm-1.0.0.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {
+        "org.nuget.system.runtime.compilerservices.unsafe": "6.0.0"
+      }
+    },
     "com.zbase.unityscreennavigator": {
       "version": "file:ZBase.UnityScreenNavigator",
       "depth": 0,
@@ -133,6 +141,13 @@
       "dependencies": {
         "com.cysharp.unitask": "2.3.3"
       }
+    },
+    "org.nuget.system.runtime.compilerservices.unsafe": {
+      "version": "6.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
