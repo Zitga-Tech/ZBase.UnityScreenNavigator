@@ -6,6 +6,12 @@ using UnityEngine.UI;
 using ZBase.UnityScreenNavigator.Core.Views;
 using ZBase.UnityScreenNavigator.Foundation;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace ZBase.UnityScreenNavigator.Core.Activities
 {
     [RequireComponent(typeof(RectMask2D))]
@@ -254,7 +260,7 @@ namespace ZBase.UnityScreenNavigator.Core.Activities
         /// Show an instance of <typeparamref name="TActivity"/>.
         /// </summary>
         /// <remarks>Fire-and-forget</remarks>
-        public void Show<TActivity>(ActivityOptions options, params object[] args)
+        public void Show<TActivity>(ActivityOptions options, params Arg[] args)
             where TActivity : Activity
         {
             ShowAndForget<TActivity>(options, args).Forget();
@@ -264,7 +270,7 @@ namespace ZBase.UnityScreenNavigator.Core.Activities
         /// Show an instance of <see cref="Activity"/>.
         /// </summary>
         /// <remarks>Fire-and-forget</remarks>
-        public void Show(ActivityOptions options, params object[] args)
+        public void Show(ActivityOptions options, params Arg[] args)
         {
             ShowAndForget<Activity>(options, args).Forget();
         }
@@ -273,7 +279,7 @@ namespace ZBase.UnityScreenNavigator.Core.Activities
         /// Show an instance of <typeparamref name="TActivity"/>.
         /// </summary>
         /// <remarks>Asynchronous</remarks>
-        public async UniTask ShowAsync<TActivity>(ActivityOptions options, params object[] args)
+        public async UniTask ShowAsync<TActivity>(ActivityOptions options, params Arg[] args)
             where TActivity : Activity
         {
             await ShowAsyncInternal<TActivity>(options, args);
@@ -283,18 +289,18 @@ namespace ZBase.UnityScreenNavigator.Core.Activities
         /// Show an instance of <see cref="Activity"/>.
         /// </summary>
         /// <remarks>Asynchronous</remarks>
-        public async UniTask ShowAsync(ActivityOptions options, params object[] args)
+        public async UniTask ShowAsync(ActivityOptions options, params Arg[] args)
         {
             await ShowAsyncInternal<Activity>(options, args);
         }
 
-        private async UniTask ShowAndForget<TActivity>(ActivityOptions options, Memory<object> args)
+        private async UniTask ShowAndForget<TActivity>(ActivityOptions options, Memory<Arg> args)
             where TActivity : Activity
         {
             await ShowAsyncInternal<TActivity>(options, args);
         }
 
-        private async UniTask ShowAsyncInternal<TActivity>(ActivityOptions options, Memory<object> args)
+        private async UniTask ShowAsyncInternal<TActivity>(ActivityOptions options, Memory<Arg> args)
             where TActivity : Activity
         {
             var resourcePath = options.options.resourcePath;
@@ -356,12 +362,12 @@ namespace ZBase.UnityScreenNavigator.Core.Activities
         /// Hide an instance of <see cref="Activity"/>.
         /// </summary>
         /// <remarks>Fire-and-forget</remarks>
-        public void Hide(string resourcePath, bool playAnimation = true, params object[] args)
+        public void Hide(string resourcePath, bool playAnimation = true, params Arg[] args)
         {
             HideAndForget(resourcePath, playAnimation, args).Forget();
         }
 
-        private async UniTaskVoid HideAndForget(string resourcePath, bool playAnimation, params object[] args)
+        private async UniTaskVoid HideAndForget(string resourcePath, bool playAnimation, params Arg[] args)
         {
             await HideAsync(resourcePath, playAnimation, args);
         }
@@ -370,7 +376,7 @@ namespace ZBase.UnityScreenNavigator.Core.Activities
         /// Hide an instance of <see cref="Activity"/>.
         /// </summary>
         /// <remarks>Asynchronous</remarks>
-        public async UniTask HideAsync(string resourcePath, bool playAnimation = true, params object[] args)
+        public async UniTask HideAsync(string resourcePath, bool playAnimation = true, params Arg[] args)
         {
             if (TryGet(resourcePath, out var viewRef) == false)
             {

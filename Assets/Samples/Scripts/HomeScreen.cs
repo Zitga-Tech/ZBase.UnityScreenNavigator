@@ -7,6 +7,12 @@ using ZBase.UnityScreenNavigator.Core.Modals;
 using ZBase.UnityScreenNavigator.Core.Screens;
 using ZBase.UnityScreenNavigator.Core.Views;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace Demo.Scripts
 {
     public class HomeScreen : ZBase.UnityScreenNavigator.Core.Screens.Screen
@@ -14,7 +20,7 @@ namespace Demo.Scripts
         [SerializeField] private Button _settingButton;
         [SerializeField] private Button _shopButton;
 
-        public override async UniTask Initialize(Memory<object> args)
+        public override async UniTask Initialize(Memory<Arg> args)
         {
             _settingButton.onClick.RemoveAllListeners();
             _shopButton.onClick.RemoveAllListeners();
@@ -28,7 +34,7 @@ namespace Demo.Scripts
             await UniTask.Delay(TimeSpan.FromSeconds(1));
         }
 
-        public override void DidPushEnter(Memory<object> args)
+        public override void DidPushEnter(Memory<Arg> args)
         {
             ActivityContainer.Find(ContainerKey.Activities).Hide(ResourceKey.LoadingActivity());
         }

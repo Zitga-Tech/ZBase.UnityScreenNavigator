@@ -6,6 +6,12 @@ using ZBase.UnityScreenNavigator.Core.Views;
 using ZBase.UnityScreenNavigator.Foundation;
 using ZBase.UnityScreenNavigator.Foundation.PriorityCollection;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace ZBase.UnityScreenNavigator.Core.Activities
 {
     [DisallowMultipleComponent]
@@ -65,30 +71,30 @@ namespace ZBase.UnityScreenNavigator.Core.Activities
         }
 
         /// <inheritdoc/>
-        public virtual UniTask Initialize(Memory<object> args)
+        public virtual UniTask Initialize(Memory<Arg> args)
         {
             return UniTask.CompletedTask;
         }
 
         /// <inheritdoc/>
-        public virtual UniTask WillShow(Memory<object> args)
+        public virtual UniTask WillShow(Memory<Arg> args)
         {
             return UniTask.CompletedTask;
         }
 
         /// <inheritdoc/>
-        public virtual void DidShow(Memory<object> args)
+        public virtual void DidShow(Memory<Arg> args)
         {
         }
 
         /// <inheritdoc/>
-        public virtual UniTask WillHide(Memory<object> args)
+        public virtual UniTask WillHide(Memory<Arg> args)
         {
             return UniTask.CompletedTask;
         }
 
         /// <inheritdoc/>
-        public virtual void DidHide(Memory<object> args)
+        public virtual void DidHide(Memory<Arg> args)
         {
         }
 
@@ -108,7 +114,7 @@ namespace ZBase.UnityScreenNavigator.Core.Activities
             _lifecycleEvents.Remove(lifecycleEvent);
         }
 
-        internal async UniTask AfterLoadAsync(RectTransform parentTransform, Memory<object> args)
+        internal async UniTask AfterLoadAsync(RectTransform parentTransform, Memory<Arg> args)
         {
             _lifecycleEvents.Add(this, 0);
             SetIdentifer();
@@ -121,7 +127,7 @@ namespace ZBase.UnityScreenNavigator.Core.Activities
             await WaitForAsync(tasks);
         }
 
-        internal async UniTask BeforeEnterAsync(bool show, Memory<object> args)
+        internal async UniTask BeforeEnterAsync(bool show, Memory<Arg> args)
         {
             IsTransitioning = true;
             TransitionAnimationType = show
@@ -157,7 +163,7 @@ namespace ZBase.UnityScreenNavigator.Core.Activities
             SetTransitionProgress(1.0f);
         }
 
-        internal void AfterEnter(bool show, Memory<object> args)
+        internal void AfterEnter(bool show, Memory<Arg> args)
         {
             if (show)
             {

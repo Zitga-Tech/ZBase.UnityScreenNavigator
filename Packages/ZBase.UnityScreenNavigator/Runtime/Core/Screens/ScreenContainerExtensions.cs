@@ -1,5 +1,11 @@
 using System;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace ZBase.UnityScreenNavigator.Core.Screens
 {
     public static class ScreenContainerExtensions
@@ -14,10 +20,10 @@ namespace ZBase.UnityScreenNavigator.Core.Screens
         /// <param name="onAfterPop"></param>
         public static void AddCallbackReceiver(
               this ScreenContainer self
-            , Action<Screen, Screen, Memory<object>> onBeforePush = null
-            , Action<Screen, Screen, Memory<object>> onAfterPush = null
-            , Action<Screen, Screen, Memory<object>> onBeforePop = null
-            , Action<Screen, Screen, Memory<object>> onAfterPop = null
+            , Action<Screen, Screen, Memory<Arg>> onBeforePush = null
+            , Action<Screen, Screen, Memory<Arg>> onAfterPush = null
+            , Action<Screen, Screen, Memory<Arg>> onBeforePop = null
+            , Action<Screen, Screen, Memory<Arg>> onAfterPop = null
         )
         {
             var callbackReceiver = new AnonymousScreenContainerCallbackReceiver(
@@ -39,10 +45,10 @@ namespace ZBase.UnityScreenNavigator.Core.Screens
         public static void AddCallbackReceiver(
               this ScreenContainer self
             , Screen screen
-            , Action<Screen, Memory<object>> onBeforePush = null
-            , Action<Screen, Memory<object>> onAfterPush = null
-            , Action<Screen, Memory<object>> onBeforePop = null
-            , Action<Screen, Memory<object>> onAfterPop = null
+            , Action<Screen, Memory<Arg>> onBeforePush = null
+            , Action<Screen, Memory<Arg>> onAfterPush = null
+            , Action<Screen, Memory<Arg>> onBeforePop = null
+            , Action<Screen, Memory<Arg>> onAfterPop = null
         )
         {
             var callbackReceiver = new AnonymousScreenContainerCallbackReceiver();

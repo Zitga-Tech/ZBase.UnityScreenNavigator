@@ -1,17 +1,23 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace ZBase.UnityScreenNavigator.Core.Screens
 {
     public static class ScreenExtensions
     {
         public static void AddLifecycleEvent(
               this Screen self
-            , Func<Memory<object>, UniTask> initialize = null
-            , Func<Memory<object>, UniTask> onWillPushEnter = null, Action<Memory<object>> onDidPushEnter = null
-            , Func<Memory<object>, UniTask> onWillPushExit = null, Action<Memory<object>> onDidPushExit = null
-            , Func<Memory<object>, UniTask> onWillPopEnter = null, Action<Memory<object>> onDidPopEnter = null
-            , Func<Memory<object>, UniTask> onWillPopExit = null, Action<Memory<object>> onDidPopExit = null
+            , Func<Memory<Arg>, UniTask> initialize = null
+            , Func<Memory<Arg>, UniTask> onWillPushEnter = null, Action<Memory<Arg>> onDidPushEnter = null
+            , Func<Memory<Arg>, UniTask> onWillPushExit = null, Action<Memory<Arg>> onDidPushExit = null
+            , Func<Memory<Arg>, UniTask> onWillPopEnter = null, Action<Memory<Arg>> onDidPopEnter = null
+            , Func<Memory<Arg>, UniTask> onWillPopExit = null, Action<Memory<Arg>> onDidPopExit = null
             , Func<UniTask> onCleanup = null
             , int priority = 0
         )

@@ -8,6 +8,12 @@ using ZBase.UnityScreenNavigator.Foundation;
 using ZBase.UnityScreenNavigator.Foundation.AssetLoaders;
 using ZBase.UnityScreenNavigator.Foundation.Collections;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace ZBase.UnityScreenNavigator.Core.Sheets
 {
     [RequireComponent(typeof(RectMask2D))]
@@ -428,7 +434,7 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
         /// Register an instance of <typeparamref name="TSheet"/>.
         /// </summary>
         /// <remarks>Fire-and-forget</remarks>
-        public void Register<TSheet>(SheetOptions options, params object[] args)
+        public void Register<TSheet>(SheetOptions options, params Arg[] args)
             where TSheet : Sheet
         {
             RegisterAndForget<TSheet>(options, args).Forget();
@@ -438,7 +444,7 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
         /// Register an instance of <see cref="Sheet"/>.
         /// </summary>
         /// <remarks>Fire-and-forget</remarks>
-        public void Register(SheetOptions options, params object[] args)
+        public void Register(SheetOptions options, params Arg[] args)
         {
             RegisterAndForget<Sheet>(options, args).Forget();
         }
@@ -447,7 +453,7 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
         /// Register an instance of <typeparamref name="TSheet"/>.
         /// </summary>
         /// <remarks>Asynchronous</remarks>
-        public async UniTask<int> RegisterAsync<TSheet>(SheetOptions options, params object[] args)
+        public async UniTask<int> RegisterAsync<TSheet>(SheetOptions options, params Arg[] args)
             where TSheet : Sheet
         {
             return await RegisterAsyncInternal<TSheet>(options, args);
@@ -457,18 +463,18 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
         /// Register an instance of <see cref="Sheet"/>.
         /// </summary>
         /// <remarks>Asynchronous</remarks>
-        public async UniTask<int> RegisterAsync(SheetOptions options, params object[] args)
+        public async UniTask<int> RegisterAsync(SheetOptions options, params Arg[] args)
         {
             return await RegisterAsyncInternal<Sheet>(options, args);
         }
 
-        private async UniTaskVoid RegisterAndForget<TSheet>(SheetOptions options, Memory<object> args)
+        private async UniTaskVoid RegisterAndForget<TSheet>(SheetOptions options, Memory<Arg> args)
             where TSheet : Sheet
         {
             await RegisterAsyncInternal<TSheet>(options, args);
         }
 
-        private async UniTask<int> RegisterAsyncInternal<TSheet>(SheetOptions options, Memory<object> args)
+        private async UniTask<int> RegisterAsyncInternal<TSheet>(SheetOptions options, Memory<Arg> args)
             where TSheet : Sheet
         {
             var resourcePath = options.resourcePath;
@@ -491,7 +497,7 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
         /// Show an instance of <see cref="Sheet"/>.
         /// </summary>
         /// <remarks>Fire-and-forget</remarks>
-        public void Show(int sheetId, bool playAnimation, params object[] args)
+        public void Show(int sheetId, bool playAnimation, params Arg[] args)
         {
             ShowAndForget(sheetId, playAnimation, args).Forget();
         }
@@ -500,17 +506,17 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
         /// Show an instance of <see cref="Sheet"/>.
         /// </summary>
         /// <remarks>Asynchronous</remarks>
-        public async UniTask ShowAsync(int sheetId, bool playAnimation, params object[] args)
+        public async UniTask ShowAsync(int sheetId, bool playAnimation, params Arg[] args)
         {
             await ShowAsyncInternal(sheetId, playAnimation, args);
         }
 
-        private async UniTaskVoid ShowAndForget(int sheetId, bool playAnimation, Memory<object> args)
+        private async UniTaskVoid ShowAndForget(int sheetId, bool playAnimation, Memory<Arg> args)
         {
             await ShowAsyncInternal(sheetId, playAnimation, args);
         }
 
-        private async UniTask ShowAsyncInternal(int sheetId, bool playAnimation, Memory<object> args)
+        private async UniTask ShowAsyncInternal(int sheetId, bool playAnimation, Memory<Arg> args)
         {
             if (IsInTransition)
             {
@@ -590,12 +596,12 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
         /// Hide an instance of <see cref="Sheet"/>.
         /// </summary>
         /// <remarks>Fire-and-forget</remarks>
-        public void Hide(bool playAnimation, params object[] args)
+        public void Hide(bool playAnimation, params Arg[] args)
         {
             HideAndForget(playAnimation, args).Forget();
         }
 
-        private async UniTaskVoid HideAndForget(bool playAnimation, params object[] args)
+        private async UniTaskVoid HideAndForget(bool playAnimation, params Arg[] args)
         {
             await HideAsync(playAnimation, args);
         }
@@ -604,7 +610,7 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
         /// Hide an instance of <see cref="Sheet"/>.
         /// </summary>
         /// <remarks>Asynchronous</remarks>
-        public async UniTask HideAsync(bool playAnimation, params object[] args)
+        public async UniTask HideAsync(bool playAnimation, params Arg[] args)
         {
             if (IsInTransition)
             {

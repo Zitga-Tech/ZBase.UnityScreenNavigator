@@ -1,14 +1,20 @@
 ﻿using System;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace ZBase.UnityScreenNavigator.Core.Activities
 {
     public static class ActivityContainerExtensions
     {
         public static void AddCallbackReceiver(this ActivityContainer self,
-              Action<Activity, Memory<object>> onBeforeShow = null
-            , Action<Activity, Memory<object>> onAfterShow = null
-            , Action<Activity, Memory<object>> onBeforeHide = null
-            , Action<Activity, Memory<object>> onAfterHide = null
+              Action<Activity, Memory<Arg>> onBeforeShow = null
+            , Action<Activity, Memory<Arg>> onAfterShow = null
+            , Action<Activity, Memory<Arg>> onBeforeHide = null
+            , Action<Activity, Memory<Arg>> onAfterHide = null
         )
         {
             var callbackReceiver = new AnonymousActivityContainerCallbackReceiver(
@@ -21,10 +27,10 @@ namespace ZBase.UnityScreenNavigator.Core.Activities
         public static void AddCallbackReceiver(
               this ActivityContainer self
             , Activity activity
-            , Action<Activity, Memory<object>> onBeforePush = null
-            , Action<Activity, Memory<object>> onAfterPush = null
-            , Action<Activity, Memory<object>> onBeforePop = null
-            , Action<Activity, Memory<object>> onAfterPop = null
+            , Action<Activity, Memory<Arg>> onBeforePush = null
+            , Action<Activity, Memory<Arg>> onAfterPush = null
+            , Action<Activity, Memory<Arg>> onBeforePop = null
+            , Action<Activity, Memory<Arg>> onAfterPop = null
         )
         {
             var callbackReceiver = new AnonymousActivityContainerCallbackReceiver();

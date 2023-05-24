@@ -7,6 +7,12 @@ using ZBase.UnityScreenNavigator.Core;
 using ZBase.UnityScreenNavigator.Core.Views;
 using ZBase.UnityScreenNavigator.Core.Sheets;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace Demo.Scripts
 {
     public class ShopItemGridSheet : Sheet
@@ -23,7 +29,7 @@ namespace Demo.Scripts
             SetupTransitionAnimations(index);
         }
 
-        public override UniTask Initialize(Memory<object> args)
+        public override UniTask Initialize(Memory<Arg> args)
         {
             var key = ResourceKey.CharacterThumbnailSprite(_characterId, 1);
             _thumbnailImage.sprite = DemoAssetLoader.AssetLoader.Load<Sprite>(key).Result;

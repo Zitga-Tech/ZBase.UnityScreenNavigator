@@ -7,6 +7,12 @@ using ZBase.UnityScreenNavigator.Core.Views;
 using ZBase.UnityScreenNavigator.Foundation;
 using ZBase.UnityScreenNavigator.Foundation.Collections;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace ZBase.UnityScreenNavigator.Core.Screens
 {
     [RequireComponent(typeof(RectMask2D))]
@@ -287,7 +293,7 @@ namespace ZBase.UnityScreenNavigator.Core.Screens
         /// </summary>
         /// <param name="ignoreFront">Ignore if the screen is already in the front.</param>
         /// <remarks>Fire-and-forget</remarks>
-        public void BringToFront(ScreenOptions options, bool ignoreFront, params object[] args)
+        public void BringToFront(ScreenOptions options, bool ignoreFront, params Arg[] args)
         {
             BringToFrontAndForget(options, ignoreFront, args).Forget();
         }
@@ -297,17 +303,17 @@ namespace ZBase.UnityScreenNavigator.Core.Screens
         /// </summary>
         /// <param name="ignoreFront">Ignore if the screen is already in the front.</param>
         /// <remarks>Asynchronous</remarks>
-        public async UniTask BringToFrontAsync(ScreenOptions options, bool ignoreFront, params object[] args)
+        public async UniTask BringToFrontAsync(ScreenOptions options, bool ignoreFront, params Arg[] args)
         {
             await BringToFrontAsyncInternal(options, ignoreFront, args);
         }
 
-        private async UniTaskVoid BringToFrontAndForget(ScreenOptions options, bool ignoreFront, Memory<object> args)
+        private async UniTaskVoid BringToFrontAndForget(ScreenOptions options, bool ignoreFront, Memory<Arg> args)
         {
             await BringToFrontAsyncInternal(options, ignoreFront, args);
         }
 
-        private async UniTask BringToFrontAsyncInternal(ScreenOptions options, bool ignoreFront, Memory<object> args)
+        private async UniTask BringToFrontAsyncInternal(ScreenOptions options, bool ignoreFront, Memory<Arg> args)
         {
             var resourcePath = options.options.resourcePath;
 
@@ -412,7 +418,7 @@ namespace ZBase.UnityScreenNavigator.Core.Screens
         /// Push an instance of <typeparamref name="TScreen"/>.
         /// </summary>
         /// <remarks>Fire-and-forget</remarks>
-        public void Push<TScreen>(ScreenOptions options, params object[] args)
+        public void Push<TScreen>(ScreenOptions options, params Arg[] args)
             where TScreen : Screen
         {
             PushAndForget<TScreen>(options, args).Forget();
@@ -422,7 +428,7 @@ namespace ZBase.UnityScreenNavigator.Core.Screens
         /// Push an instance of <see cref="Screen"/>.
         /// </summary>
         /// <remarks>Fire-and-forget</remarks>
-        public void Push(ScreenOptions options, params object[] args)
+        public void Push(ScreenOptions options, params Arg[] args)
         {
             PushAndForget<Screen>(options, args).Forget();
         }
@@ -431,7 +437,7 @@ namespace ZBase.UnityScreenNavigator.Core.Screens
         /// Push an instance of <typeparamref name="TScreen"/>.
         /// </summary>
         /// <remarks>Asynchronous</remarks>
-        public async UniTask PushAsync<TScreen>(ScreenOptions options, params object[] args)
+        public async UniTask PushAsync<TScreen>(ScreenOptions options, params Arg[] args)
             where TScreen : Screen
         {
             await PushAsyncInternal<TScreen>(options, args);
@@ -441,18 +447,18 @@ namespace ZBase.UnityScreenNavigator.Core.Screens
         /// Push an instance of <see cref="Screen"/>.
         /// </summary>
         /// <remarks>Asynchronous</remarks>
-        public async UniTask PushAsync(ScreenOptions options, params object[] args)
+        public async UniTask PushAsync(ScreenOptions options, params Arg[] args)
         {
             await PushAsyncInternal<Screen>(options, args);
         }
 
-        private async UniTaskVoid PushAndForget<TScreen>(ScreenOptions options, Memory<object> args)
+        private async UniTaskVoid PushAndForget<TScreen>(ScreenOptions options, Memory<Arg> args)
             where TScreen : Screen
         {
             await PushAsyncInternal<Screen>(options, args);
         }
 
-        private async UniTask PushAsyncInternal<TScreen>(ScreenOptions options, Memory<object> args)
+        private async UniTask PushAsyncInternal<TScreen>(ScreenOptions options, Memory<Arg> args)
             where TScreen : Screen
         {
             var resourcePath = options.options.resourcePath;
@@ -552,12 +558,12 @@ namespace ZBase.UnityScreenNavigator.Core.Screens
         /// Pop current instance of <see cref="Screen"/>.
         /// </summary>
         /// <remarks>Fire-and-forget</remarks>
-        public void Pop(bool playAnimation, params object[] args)
+        public void Pop(bool playAnimation, params Arg[] args)
         {
             PopAndForget(playAnimation, args).Forget();
         }
 
-        private async UniTaskVoid PopAndForget(bool playAnimation, params object[] args)
+        private async UniTaskVoid PopAndForget(bool playAnimation, params Arg[] args)
         {
             await PopAsync(playAnimation, args);
         }
@@ -566,7 +572,7 @@ namespace ZBase.UnityScreenNavigator.Core.Screens
         /// Pop current instance of <see cref="Screen"/>.
         /// </summary>
         /// <remarks>Asynchronous</remarks>
-        public async UniTask PopAsync(bool playAnimation, params object[] args)
+        public async UniTask PopAsync(bool playAnimation, params Arg[] args)
         {
             if (_screens.Count == 0)
             {

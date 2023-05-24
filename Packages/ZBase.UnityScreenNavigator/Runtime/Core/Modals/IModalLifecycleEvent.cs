@@ -1,6 +1,12 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace ZBase.UnityScreenNavigator.Core.Modals
 {
     public interface IModalLifecycleEvent
@@ -9,51 +15,51 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
         /// Call this method after the modal is loaded.
         /// </summary>
         /// <returns></returns>
-        UniTask Initialize(Memory<object> args);
+        UniTask Initialize(Memory<Arg> args);
 
         /// <summary>
         /// Called just before this modal is displayed by the Push transition.
         /// </summary>
         /// <returns></returns>
-        UniTask WillPushEnter(Memory<object> args);
+        UniTask WillPushEnter(Memory<Arg> args);
 
         /// <summary>
         /// Called just after this modal is displayed by the Push transition.
         /// </summary>
-        void DidPushEnter(Memory<object> args);
+        void DidPushEnter(Memory<Arg> args);
 
         /// <summary>
         /// Called just before this modal is hidden by the Push transition.
         /// </summary>
         /// <returns></returns>
-        UniTask WillPushExit(Memory<object> args);
+        UniTask WillPushExit(Memory<Arg> args);
 
         /// <summary>
         /// Called just after this modal is hidden by the Push transition.
         /// </summary>
-        void DidPushExit(Memory<object> args);
+        void DidPushExit(Memory<Arg> args);
 
         /// <summary>
         /// Called just before this modal is displayed by the Pop transition.
         /// </summary>
         /// <returns></returns>
-        UniTask WillPopEnter(Memory<object> args);
+        UniTask WillPopEnter(Memory<Arg> args);
 
         /// <summary>
         /// Called just after this modal is displayed by the Pop transition.
         /// </summary>
-        void DidPopEnter(Memory<object> args);
+        void DidPopEnter(Memory<Arg> args);
 
         /// <summary>
         /// Called just before this modal is hidden by the Pop transition.
         /// </summary>
         /// <returns></returns>
-        UniTask WillPopExit(Memory<object> args);
+        UniTask WillPopExit(Memory<Arg> args);
 
         /// <summary>
         /// Called just after this modal is hidden by the Pop transition.
         /// </summary>
-        void DidPopExit(Memory<object> args);
+        void DidPopExit(Memory<Arg> args);
 
         /// <summary>
         /// Called just before this modal is released.

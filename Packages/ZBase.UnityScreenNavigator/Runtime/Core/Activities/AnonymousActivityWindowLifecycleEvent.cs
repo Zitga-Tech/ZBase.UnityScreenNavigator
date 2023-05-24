@@ -2,20 +2,26 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace ZBase.UnityScreenNavigator.Core.Activities
 {
     public sealed class AnonymousActivityWindowLifecycleEvent : IActivityLifecycleEvent
     {
         /// <see cref="IActivityLifecycleEvent.DidShow(Memory{object})"/>
-        public event Action<Memory<object>> OnDidShow;
+        public event Action<Memory<Arg>> OnDidShow;
 
         /// <see cref="IActivityLifecycleEvent.DidHide(Memory{object})"/>
-        public event Action<Memory<object>> OnDidHide;
+        public event Action<Memory<Arg>> OnDidHide;
 
         public AnonymousActivityWindowLifecycleEvent(
-              Func<Memory<object>, UniTask> initialize = null
-            , Func<Memory<object>, UniTask> onWillShow = null, Action<Memory<object>> onDidShow = null
-            , Func<Memory<object>, UniTask> onWillHide = null, Action<Memory<object>> onDidHide = null
+              Func<Memory<Arg>, UniTask> initialize = null
+            , Func<Memory<Arg>, UniTask> onWillShow = null, Action<Memory<Arg>> onDidShow = null
+            , Func<Memory<Arg>, UniTask> onWillHide = null, Action<Memory<Arg>> onDidHide = null
             , Func<UniTask> onCleanup = null
         )
         {
@@ -37,41 +43,41 @@ namespace ZBase.UnityScreenNavigator.Core.Activities
         }
 
         /// <see cref="IActivityLifecycleEvent.Initialize(Memory{object})"/>
-        public List<Func<Memory<object>, UniTask>> OnInitialize { get; } = new();
+        public List<Func<Memory<Arg>, UniTask>> OnInitialize { get; } = new();
 
         /// <see cref="IActivityLifecycleEvent.WillShow(Memory{object})"/>
-        public List<Func<Memory<object>, UniTask>> OnWillShow { get; } = new();
+        public List<Func<Memory<Arg>, UniTask>> OnWillShow { get; } = new();
 
         /// <see cref="IActivityLifecycleEvent.WillHide(Memory{object})"/>
-        public List<Func<Memory<object>, UniTask>> OnWillHide { get; } = new();
+        public List<Func<Memory<Arg>, UniTask>> OnWillHide { get; } = new();
 
         /// <see cref="IActivityLifecycleEvent.Cleanup"/>
         public List<Func<UniTask>> OnCleanup { get; } = new();
 
-        async UniTask IActivityLifecycleEvent.Initialize(Memory<object> args)
+        async UniTask IActivityLifecycleEvent.Initialize(Memory<Arg> args)
         {
             foreach (var onInitialize in OnInitialize)
                 await onInitialize.Invoke(args);
         }
 
-        async UniTask IActivityLifecycleEvent.WillShow(Memory<object> args)
+        async UniTask IActivityLifecycleEvent.WillShow(Memory<Arg> args)
         {
             foreach (var onWillShowEnter in OnWillShow)
                 await onWillShowEnter.Invoke(args);
         }
 
-        void IActivityLifecycleEvent.DidShow(Memory<object> args)
+        void IActivityLifecycleEvent.DidShow(Memory<Arg> args)
         {
             OnDidShow?.Invoke(args);
         }
 
-        async UniTask IActivityLifecycleEvent.WillHide(Memory<object> args)
+        async UniTask IActivityLifecycleEvent.WillHide(Memory<Arg> args)
         {
             foreach (var onWillHideEnter in OnWillHide)
                 await onWillHideEnter.Invoke(args);
         }
 
-        void IActivityLifecycleEvent.DidHide(Memory<object> args)
+        void IActivityLifecycleEvent.DidHide(Memory<Arg> args)
         {
             OnDidHide?.Invoke(args);
         }

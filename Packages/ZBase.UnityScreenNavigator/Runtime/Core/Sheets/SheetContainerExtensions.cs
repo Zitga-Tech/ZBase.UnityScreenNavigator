@@ -1,5 +1,11 @@
 using System;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace ZBase.UnityScreenNavigator.Core.Sheets
 {
     public static class SheetContainerExtensions
@@ -13,10 +19,10 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
         /// <param name="onBeforeHide"></param>
         /// <param name="onAfterHide"></param>
         public static void AddCallbackReceiver(this SheetContainer self
-            , Action<Sheet, Sheet, Memory<object>> onBeforeShow = null
-            , Action<Sheet, Sheet, Memory<object>> onAfterShow = null
-            , Action<Sheet, Memory<object>> onBeforeHide = null
-            , Action<Sheet, Memory<object>> onAfterHide = null
+            , Action<Sheet, Sheet, Memory<Arg>> onBeforeShow = null
+            , Action<Sheet, Sheet, Memory<Arg>> onAfterShow = null
+            , Action<Sheet, Memory<Arg>> onBeforeHide = null
+            , Action<Sheet, Memory<Arg>> onAfterHide = null
         )
         {
             var callbackReceiver = new AnonymousSheetContainerCallbackReceiver(

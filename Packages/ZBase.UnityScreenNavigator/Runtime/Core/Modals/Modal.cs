@@ -5,6 +5,12 @@ using ZBase.UnityScreenNavigator.Core.Views;
 using ZBase.UnityScreenNavigator.Foundation;
 using ZBase.UnityScreenNavigator.Foundation.PriorityCollection;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace ZBase.UnityScreenNavigator.Core.Modals
 {
     [DisallowMultipleComponent]
@@ -45,52 +51,52 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
         public event Action<float> TransitionAnimationProgressChanged;
 
         /// <inheritdoc/>
-        public virtual UniTask Initialize(Memory<object> args)
+        public virtual UniTask Initialize(Memory<Arg> args)
         {
             return UniTask.CompletedTask;
         }
 
         /// <inheritdoc/>
-        public virtual UniTask WillPushEnter(Memory<object> args)
+        public virtual UniTask WillPushEnter(Memory<Arg> args)
         {
             return UniTask.CompletedTask;
         }
 
         /// <inheritdoc/>
-        public virtual void DidPushEnter(Memory<object> args)
+        public virtual void DidPushEnter(Memory<Arg> args)
         {
         }
 
         /// <inheritdoc/>
-        public virtual UniTask WillPushExit(Memory<object> args)
-        {
-            return UniTask.CompletedTask;
-        }
-
-        /// <inheritdoc/>
-        public virtual void DidPushExit(Memory<object> args)
-        {
-        }
-
-        /// <inheritdoc/>
-        public virtual UniTask WillPopEnter(Memory<object> args)
+        public virtual UniTask WillPushExit(Memory<Arg> args)
         {
             return UniTask.CompletedTask;
         }
 
         /// <inheritdoc/>
-        public virtual void DidPopEnter(Memory<object> args)
+        public virtual void DidPushExit(Memory<Arg> args)
         {
         }
 
         /// <inheritdoc/>
-        public virtual UniTask WillPopExit(Memory<object> args)
+        public virtual UniTask WillPopEnter(Memory<Arg> args)
         {
             return UniTask.CompletedTask;
         }
 
         /// <inheritdoc/>
-        public virtual void DidPopExit(Memory<object> args)
+        public virtual void DidPopEnter(Memory<Arg> args)
+        {
+        }
+
+        /// <inheritdoc/>
+        public virtual UniTask WillPopExit(Memory<Arg> args)
+        {
+            return UniTask.CompletedTask;
+        }
+
+        /// <inheritdoc/>
+        public virtual void DidPopExit(Memory<Arg> args)
         {
         }
 
@@ -110,7 +116,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
             _lifecycleEvents.Remove(lifecycleEvent);
         }
 
-        internal async UniTask AfterLoadAsync(RectTransform parentTransform, Memory<object> args)
+        internal async UniTask AfterLoadAsync(RectTransform parentTransform, Memory<Arg> args)
         {
             _lifecycleEvents.Add(this, 0);
             SetIdentifer();
@@ -124,7 +130,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
             await WaitForAsync(tasks);
         }
 
-        internal async UniTask BeforeEnterAsync(bool push, Memory<object> args)
+        internal async UniTask BeforeEnterAsync(bool push, Memory<Arg> args)
         {
             IsTransitioning = true;
 
@@ -170,7 +176,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
             SetTransitionProgress(1.0f);
         }
 
-        internal void AfterEnter(bool push, Memory<object> args)
+        internal void AfterEnter(bool push, Memory<Arg> args)
         {
             if (push)
             {
@@ -191,7 +197,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
             TransitionAnimationType = null;
         }
 
-        internal async UniTask BeforeExitAsync(bool push, Memory<object> args)
+        internal async UniTask BeforeExitAsync(bool push, Memory<Arg> args)
         {
             IsTransitioning = true;
 
@@ -235,7 +241,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
             SetTransitionProgress(1.0f);
         }
 
-        internal void AfterExit(bool push, Memory<object> args)
+        internal void AfterExit(bool push, Memory<Arg> args)
         {
             if (push)
             {

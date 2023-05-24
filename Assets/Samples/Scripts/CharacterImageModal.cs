@@ -4,6 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using ZBase.UnityScreenNavigator.Core.Modals;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace Demo.Scripts
 {
     public class CharacterImageModal : Modal
@@ -20,7 +26,7 @@ namespace Demo.Scripts
             _characterId = characterId;
             _rank = rank;
         }
-        public override async UniTask WillPushEnter(Memory<object> args)
+        public override async UniTask WillPushEnter(Memory<Arg> args)
         {
             var resourceKey = ResourceKey.CharacterSprite(_characterId, _rank);
             var handle = DemoAssetLoader.AssetLoader.LoadAsync<Sprite>(resourceKey);

@@ -6,6 +6,12 @@ using ZBase.UnityScreenNavigator.Core.Modals;
 using ZBase.UnityScreenNavigator.Core.Views;
 using ZBase.UnityScreenNavigator.Core.Sheets;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace Demo.Scripts
 {
     public class CharacterModal : Modal
@@ -28,7 +34,7 @@ namespace Demo.Scripts
             _characterId = characterId;
         }
 
-        public override async UniTask Initialize(Memory<object> args)
+        public override async UniTask Initialize(Memory<Arg> args)
         {
             var imageContainer = _imageContainer;
             var imageSheets = _imageSheets;
@@ -42,14 +48,14 @@ namespace Demo.Scripts
                     }
                 );
 
-                await imageContainer.RegisterAsync(options, args);
+                await imageContainer.RegisterAsync(options);
             }
 
             _expandButton.onClick.RemoveListener(OnExpandButtonClicked);
             _expandButton.onClick.AddListener(OnExpandButtonClicked);
         }
 
-        public override async UniTask WillPushEnter(Memory<object> args)
+        public override async UniTask WillPushEnter(Memory<Arg> args)
         {
             var imageContainer = _imageContainer;
             var imageSheets = _imageSheets;
@@ -59,7 +65,7 @@ namespace Demo.Scripts
                 imageSheets[i].sheet.Setup(_characterId, i + 1);
             }
 
-            await imageContainer.ShowAsync(imageSheets[0].sheetId, false, args);
+            await imageContainer.ShowAsync(imageSheets[0].sheetId, false);
 
             _selectedRank = 1;
 

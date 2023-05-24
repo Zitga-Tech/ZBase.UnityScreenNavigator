@@ -4,6 +4,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace Demo.Scripts.Activities
 {
     public class HeroInfoActivity : ZBase.UnityScreenNavigator.Core.Activities.Activity
@@ -13,7 +19,7 @@ namespace Demo.Scripts.Activities
 
         private int _characterId = 3;
 
-        public override UniTask Initialize(Memory<object> args)
+        public override UniTask Initialize(Memory<Arg> args)
         {
             var key = ResourceKey.CharacterThumbnailSprite(_characterId, 1);
             heroImage.sprite = DemoAssetLoader.AssetLoader.LoadAsync<Sprite>(key).Result;

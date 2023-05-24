@@ -1,5 +1,11 @@
 using System;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace ZBase.UnityScreenNavigator.Core.Modals
 {
     public static class ModalContainerExtensions
@@ -13,10 +19,10 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
         /// <param name="onBeforePop"></param>
         /// <param name="onAfterPop"></param>
         public static void AddCallbackReceiver(this ModalContainer self,
-            Action<Modal, Modal, Memory<object>> onBeforePush = null,
-            Action<Modal, Modal, Memory<object>> onAfterPush = null,
-            Action<Modal, Modal, Memory<object>> onBeforePop = null,
-            Action<Modal, Modal, Memory<object>> onAfterPop = null
+            Action<Modal, Modal, Memory<Arg>> onBeforePush = null,
+            Action<Modal, Modal, Memory<Arg>> onAfterPush = null,
+            Action<Modal, Modal, Memory<Arg>> onBeforePop = null,
+            Action<Modal, Modal, Memory<Arg>> onAfterPop = null
         )
         {
             var callbackReceiver = new AnonymousModalContainerCallbackReceiver(
@@ -37,8 +43,8 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
         /// <param name="onAfterPop"></param>
         public static void AddCallbackReceiver(
               this ModalContainer self, Modal modal
-            , Action<Modal, Memory<object>> onBeforePush = null, Action<Modal, Memory<object>> onAfterPush = null
-            , Action<Modal, Memory<object>> onBeforePop = null, Action<Modal, Memory<object>> onAfterPop = null
+            , Action<Modal, Memory<Arg>> onBeforePush = null, Action<Modal, Memory<Arg>> onAfterPush = null
+            , Action<Modal, Memory<Arg>> onBeforePop = null, Action<Modal, Memory<Arg>> onAfterPop = null
         )
         {
             var callbackReceiver = new AnonymousModalContainerCallbackReceiver();

@@ -7,6 +7,12 @@ using ZBase.UnityScreenNavigator.Core.Views;
 using ZBase.UnityScreenNavigator.Foundation;
 using ZBase.UnityScreenNavigator.Foundation.Collections;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace ZBase.UnityScreenNavigator.Core.Modals
 {
     [RequireComponent(typeof(RectMask2D))]
@@ -324,7 +330,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
         /// </summary>
         /// <param name="ignoreFront">Ignore if the modal is already in the front.</param>
         /// <remarks>Fire-and-forget</remarks>
-        public void BringToFront(ModalOptions options, bool ignoreFront, params object[] args)
+        public void BringToFront(ModalOptions options, bool ignoreFront, params Arg[] args)
         {
             BringToFrontAndForget(options, ignoreFront, args).Forget();
         }
@@ -334,17 +340,17 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
         /// </summary>
         /// <param name="ignoreFront">Ignore if the modal is already in the front.</param>
         /// <remarks>Asynchronous</remarks>
-        public async UniTask BringToFrontAsync(ModalOptions options, bool ignoreFront, params object[] args)
+        public async UniTask BringToFrontAsync(ModalOptions options, bool ignoreFront, params Arg[] args)
         {
             await BringToFrontAsyncInternal(options, ignoreFront, args);
         }
 
-        private async UniTaskVoid BringToFrontAndForget(ModalOptions options, bool ignoreFront, Memory<object> args)
+        private async UniTaskVoid BringToFrontAndForget(ModalOptions options, bool ignoreFront, Memory<Arg> args)
         {
             await BringToFrontAsyncInternal(options, ignoreFront, args);
         }
 
-        private async UniTask BringToFrontAsyncInternal(ModalOptions options, bool ignoreFront, Memory<object> args)
+        private async UniTask BringToFrontAsyncInternal(ModalOptions options, bool ignoreFront, Memory<Arg> args)
         {
             var resourcePath = options.options.resourcePath;
 
@@ -454,7 +460,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
         /// Push an instance of <typeparamref name="TModal"/>.
         /// </summary>
         /// <remarks>Fire-and-forget</remarks>
-        public void Push<TModal>(ModalOptions options, params object[] args)
+        public void Push<TModal>(ModalOptions options, params Arg[] args)
             where TModal : Modal
         {
             PushAndForget<TModal>(options, args).Forget();
@@ -464,7 +470,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
         /// Push an instance of <see cref="Modal"/>.
         /// </summary>
         /// <remarks>Fire-and-forget</remarks>
-        public void Push(ModalOptions options, params object[] args)
+        public void Push(ModalOptions options, params Arg[] args)
         {
             PushAndForget<Modal>(options, args).Forget();
         }
@@ -473,7 +479,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
         /// Push an instance of <typeparamref name="TModal"/>.
         /// </summary>
         /// <remarks>Asynchronous</remarks>
-        public async UniTask PushAsync<TModal>(ModalOptions options, params object[] args)
+        public async UniTask PushAsync<TModal>(ModalOptions options, params Arg[] args)
             where TModal : Modal
         {
             await PushAsyncInternal<TModal>(options, args);
@@ -483,18 +489,18 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
         /// Push an instance of <see cref="Modal"/>.
         /// </summary>
         /// <remarks>Asynchronous</remarks>
-        public async UniTask PushAsync(ModalOptions options, params object[] args)
+        public async UniTask PushAsync(ModalOptions options, params Arg[] args)
         {
             await PushAsyncInternal<Modal>(options, args);
         }
 
-        private async UniTaskVoid PushAndForget<TModal>(ModalOptions options, Memory<object> args)
+        private async UniTaskVoid PushAndForget<TModal>(ModalOptions options, Memory<Arg> args)
             where TModal : Modal
         {
             await PushAsyncInternal<TModal>(options, args);
         }
 
-        private async UniTask PushAsyncInternal<TModal>(ModalOptions options, Memory<object> args)
+        private async UniTask PushAsyncInternal<TModal>(ModalOptions options, Memory<Arg> args)
             where TModal : Modal
         {
             var resourcePath = options.options.resourcePath;
@@ -600,12 +606,12 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
         /// Push an instance of <see cref="Modal"/>.
         /// </summary>
         /// <remarks>Fire-and-forget</remarks>
-        public void Pop(bool playAnimation, params object[] args)
+        public void Pop(bool playAnimation, params Arg[] args)
         {
             PopAndForget(playAnimation, args).Forget();
         }
 
-        private async UniTaskVoid PopAndForget(bool playAnimation, params object[] args)
+        private async UniTaskVoid PopAndForget(bool playAnimation, params Arg[] args)
         {
             await PopAsync(playAnimation, args);
         }
@@ -614,7 +620,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
         /// Push an instance of <see cref="Modal"/>.
         /// </summary>
         /// <remarks>Asynchronous</remarks>
-        public async UniTask PopAsync(bool playAnimation, params object[] args)
+        public async UniTask PopAsync(bool playAnimation, params Arg[] args)
         {
             if (_modals.Count == 0)
             {

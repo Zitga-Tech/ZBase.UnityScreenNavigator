@@ -1,8 +1,14 @@
 ﻿using System;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace ZBase.UnityScreenNavigator.Core.Views
 {
-    public delegate void OnLoadCallback(Window window, Memory<object> args);
+    public delegate void OnLoadCallback(Window window, Memory<Arg> args);
 
     public readonly struct WindowOptions
     {

@@ -5,6 +5,12 @@ using ZBase.UnityScreenNavigator.Core.Views;
 using ZBase.UnityScreenNavigator.Foundation;
 using ZBase.UnityScreenNavigator.Foundation.PriorityCollection;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace ZBase.UnityScreenNavigator.Core.Sheets
 {
     [DisallowMultipleComponent]
@@ -50,30 +56,30 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
         public event Action<float> TransitionAnimationProgressChanged;
 
         /// <inheritdoc/>
-        public virtual UniTask Initialize(Memory<object> args)
+        public virtual UniTask Initialize(Memory<Arg> args)
         {
             return UniTask.CompletedTask;
         }
 
         /// <inheritdoc/>
-        public virtual UniTask WillEnter(Memory<object> args)
+        public virtual UniTask WillEnter(Memory<Arg> args)
         {
             return UniTask.CompletedTask;
         }
 
         /// <inheritdoc/>
-        public virtual void DidEnter(Memory<object> args)
+        public virtual void DidEnter(Memory<Arg> args)
         {
         }
 
         /// <inheritdoc/>
-        public virtual UniTask WillExit(Memory<object> args)
+        public virtual UniTask WillExit(Memory<Arg> args)
         {
             return UniTask.CompletedTask;
         }
 
         /// <inheritdoc/>
-        public virtual void DidExit(Memory<object> args)
+        public virtual void DidExit(Memory<Arg> args)
         {
         }
 
@@ -93,7 +99,7 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
             _lifecycleEvents.Remove(lifecycleEvent);
         }
 
-        internal async UniTask AfterLoadAsync(RectTransform parentTransform, Memory<object> args)
+        internal async UniTask AfterLoadAsync(RectTransform parentTransform, Memory<Arg> args)
         {
             _lifecycleEvents.Add(this, 0);
             SetIdentifer();
@@ -123,7 +129,7 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
             await WaitForAsync(tasks);
         }
 
-        internal async UniTask BeforeEnterAsync(Memory<object> args)
+        internal async UniTask BeforeEnterAsync(Memory<Arg> args)
         {
             IsTransitioning = true;
             TransitionAnimationType = SheetTransitionAnimationType.Enter;
@@ -158,7 +164,7 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
             RectTransform.FillParent(Parent);
         }
 
-        internal void AfterEnter(Memory<object> args)
+        internal void AfterEnter(Memory<Arg> args)
         {
             foreach (var lifecycleEvent in _lifecycleEvents)
             {
@@ -169,7 +175,7 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
             TransitionAnimationType = null;
         }
 
-        internal async UniTask BeforeExitAsync(Memory<object> args)
+        internal async UniTask BeforeExitAsync(Memory<Arg> args)
         {
             IsTransitioning = true;
             TransitionAnimationType = SheetTransitionAnimationType.Exit;
@@ -203,7 +209,7 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
             SetTransitionProgress(1.0f);
         }
 
-        internal void AfterExit(Memory<object> args)
+        internal void AfterExit(Memory<Arg> args)
         {
             foreach (var lifecycleEvent in _lifecycleEvents)
             {

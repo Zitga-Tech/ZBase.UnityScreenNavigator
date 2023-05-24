@@ -4,6 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using ZBase.UnityScreenNavigator.Core.Sheets;
 
+#if ZBASE_FOUNDATION_MVVM
+using Arg = ZBase.Foundation.Mvvm.Unions.Union;
+#else
+using Arg = System.Object;
+#endif
+
 namespace Demo.Scripts
 {
     public class ShopScreen : ZBase.UnityScreenNavigator.Core.Screens.Screen
@@ -15,7 +21,7 @@ namespace Demo.Scripts
 
         private readonly int[] _itemGridSheetIds = new int[ItemGridSheetCount];
 
-        public override async UniTask Initialize(Memory<object> args)
+        public override async UniTask Initialize(Memory<Arg> args)
         {
             var itemGridContainer = _itemGridContainer;
             var itemGridSheetIds = _itemGridSheetIds;
@@ -29,9 +35,8 @@ namespace Demo.Scripts
                     onLoaded: (id, sheet) => OnSheetLoaded(id, sheet, index)
                 );
 
-                var sheetId = await itemGridContainer.RegisterAsync(options, args);
+                var sheetId = await itemGridContainer.RegisterAsync(options);
                 var button = itemGridButtons[index];
-
                 button.onClick.RemoveAllListeners();
                 button.onClick.AddListener(() => ShowSheet(sheetId).Forget());
             }
@@ -39,12 +44,12 @@ namespace Demo.Scripts
             await itemGridContainer.ShowAsync(itemGridSheetIds[0], false);
         }
 
-        public override void DidPopExit(Memory<object> args)
+        public override void DidPopExit(Memory<Arg> args)
         {
             _itemGridContainer.Deinitialize();
         }
 
-        public override void DidPushExit(Memory<object> args)
+        public override void DidPushExit(Memory<Arg> args)
         {
             _itemGridContainer.Deinitialize();
         }
