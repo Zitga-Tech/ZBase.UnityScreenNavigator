@@ -154,7 +154,7 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
             }
         }
 
-        public void Deinitialize()
+        public void Deinitialize(params object[] args)
         {
             _activeSheetId = null;
             IsInTransition = false;
@@ -163,7 +163,8 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
 
             foreach (var sheetRef in sheets.Values)
             {
-                ReturnToPool(sheetRef);
+                sheetRef.Sheet.Deinitialize(args);
+                DestroyAndForget(sheetRef).Forget();
             }
 
             sheets.Clear();
@@ -365,14 +366,19 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
         /// <remarks>Asynchronous</remarks>
         public async UniTask PreloadAsync(string resourcePath, bool loadAsync = true, int amount = 1)
         {
+            if (amount < 1)
+            {
+                Debug.LogWarning($"The amount of preloaded view instances should be greater than 0.");
+                return;
+            }
+
             if (_resourcePathToPool.TryGetValue(resourcePath, out var pool) == false)
             {
                 _resourcePathToPool[resourcePath] = pool = new Queue<Sheet>();
             }
 
-            if (amount < 1)
+            if (pool.Count >= amount)
             {
-                Debug.LogWarning($"The amount of preloaded view instances should be greater than 0.");
                 return;
             }
 

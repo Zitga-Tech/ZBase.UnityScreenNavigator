@@ -10,7 +10,7 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
             , Func<Memory<object>, UniTask> initialize = null
             , Func<Memory<object>, UniTask> onWillEnter = null, Action<Memory<object>> onDidEnter = null
             , Func<Memory<object>, UniTask> onWillExit = null, Action<Memory<object>> onDidExit = null
-            , Func<UniTask> onCleanup = null
+            , Action<Memory<object>> onDeinitialize = null, Func<UniTask> onCleanup = null
             , int priority = 0
         )
         {
@@ -18,7 +18,7 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
                 initialize,
                 onWillEnter, onDidEnter,
                 onWillExit, onDidExit,
-                onCleanup
+                onDeinitialize, onCleanup
             );
 
             self.AddLifecycleEvent(lifecycleEvent, priority);

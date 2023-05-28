@@ -12,11 +12,14 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
         /// <see cref="ISheetLifecycleEvent.DidExit(Memory{object})"/>
         public event Action<Memory<object>> OnDidExit;
 
+        /// <see cref="ISheetLifecycleEvent.Deinitialize(Memory{object})"/>
+        public event Action<Memory<object>> OnDeinitialize;
+
         public AnonymousSheetLifecycleEvent(
               Func<Memory<object>, UniTask> initialize = null
             , Func<Memory<object>, UniTask> onWillEnter = null, Action<Memory<object>> onDidEnter = null
             , Func<Memory<object>, UniTask> onWillExit = null, Action<Memory<object>> onDidExit = null
-            , Func<UniTask> onCleanup = null
+            , Action<Memory<object>> onDeinitialize = null, Func<UniTask> onCleanup = null
         )
         {
             if (initialize != null)
@@ -31,6 +34,7 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
                 OnWillExit.Add(onWillExit);
 
             OnDidExit = onDidExit;
+            OnDeinitialize = onDeinitialize;
 
             if (onCleanup != null)
                 OnCleanup.Add(onCleanup);
@@ -80,6 +84,11 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
         {
             foreach (var onCleanup in OnCleanup)
                 await onCleanup.Invoke();
+        }
+
+        void ISheetLifecycleEvent.Deinitialize(Memory<object> args)
+        {
+            OnDeinitialize?.Invoke(args);
         }
     }
 }

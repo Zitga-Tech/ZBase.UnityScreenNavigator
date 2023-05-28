@@ -36,6 +36,12 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
         void DidExit(Memory<object> args);
 
         /// <summary>
+        /// Called just when this sheet is deinitialized.
+        /// </summary>
+        /// <returns></returns>
+        void Deinitialize(Memory<object> args);
+
+        /// <summary>
         /// Called just before this sheet is released.
         /// </summary>
         /// <returns></returns>

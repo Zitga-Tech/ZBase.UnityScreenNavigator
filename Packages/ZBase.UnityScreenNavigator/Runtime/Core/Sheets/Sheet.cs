@@ -78,6 +78,11 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
         }
 
         /// <inheritdoc/>
+        public virtual void Deinitialize(Memory<object> args)
+        {
+        }
+
+        /// <inheritdoc/>
         public virtual UniTask Cleanup()
         {
             return UniTask.CompletedTask;
