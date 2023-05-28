@@ -213,14 +213,19 @@ namespace ZBase.UnityScreenNavigator.Core.Views
         /// <remarks>Asynchronous</remarks>
         public async UniTask PreloadAsync(string resourcePath, bool loadAsync = true, int amount = 1)
         {
+            if (amount < 1)
+            {
+                Debug.LogWarning($"The amount of preloaded view instances should be greater than 0.");
+                return;
+            }
+
             if (_resourcePathToPool.TryGetValue(resourcePath, out var pool) == false)
             {
                 _resourcePathToPool[resourcePath] = pool = new Queue<View>();
             }
 
-            if (amount < 1)
+            if (pool.Count >= amount)
             {
-                Debug.LogWarning($"The amount of preloaded view instances should be greater than 0.");
                 return;
             }
 
