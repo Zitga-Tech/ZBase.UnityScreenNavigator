@@ -149,6 +149,7 @@ namespace ZBase.UnityScreenNavigator.Core
                 {
                     return _assetLoader;
                 }
+
                 if (_defaultAssetLoader == null)
                 {
 #if USN_USE_ADDRESSABLES
@@ -157,6 +158,7 @@ namespace ZBase.UnityScreenNavigator.Core
                     _defaultAssetLoader = CreateInstance<ResourcesAssetLoaderObject>();
 #endif
                 }
+
                 return _defaultAssetLoader;
             }
         }

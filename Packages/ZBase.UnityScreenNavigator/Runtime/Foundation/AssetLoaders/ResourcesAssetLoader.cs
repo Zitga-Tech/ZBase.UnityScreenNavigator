@@ -48,6 +48,7 @@ namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
             {
                 var result = req.asset as T;
                 handle.SetResult(result);
+
                 var status = result != null ? AssetLoadStatus.Success : AssetLoadStatus.Failed;
                 handle.SetStatus(status);
 
@@ -65,10 +66,6 @@ namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
             return handle;
         }
 
-        /// <summary>
-        /// Resources.UnloadUnusedAssets() is responsible for releasing
-        /// assets loaded by Resources.Load(), so nothing is done here.
-        /// </summary>
         public void Release(AssetLoadHandleId handleId)
         {
             if (_controlIdToHandles.TryGetValue(handleId, out var handle) == false)
@@ -77,11 +74,11 @@ namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
             }
 
             _controlIdToHandles.Remove(handleId);
+            handle.SetTypelessResult(null);
 
-            if (handle.TypelessResult)
-            {
-                Resources.UnloadAsset(handle.TypelessResult);
-            }
+            /// Resources.UnloadUnusedAssets() is responsible for releasing
+            /// assets loaded by Resources.Load(), so nothing is done here.
+            /// Don't use Resources.UnloadAsset.
         }
     }
 }
