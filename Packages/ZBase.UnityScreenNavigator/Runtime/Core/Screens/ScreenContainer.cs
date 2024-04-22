@@ -156,13 +156,27 @@ namespace ZBase.UnityScreenNavigator.Core.Screens
         }
 
         /// <summary>
-        /// Create a new <see cref="ScreenContainer"/> as a layer.
+        /// Create a new instance <see cref="ScreenContainer"/> as a layer.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ScreenContainer Create(
               WindowContainerConfig layerConfig
             , IWindowContainerManager manager
             , UnityScreenNavigatorSettings settings
         )
+        {
+            return Create<ScreenContainer>(layerConfig, manager, settings);
+        }
+
+        /// <summary>
+        /// Create a new instance <typeparamref name="TContainer"/> as a layer.
+        /// </summary>
+        public static TContainer Create<TContainer>(
+              WindowContainerConfig layerConfig
+            , IWindowContainerManager manager
+            , UnityScreenNavigatorSettings settings
+        )
+            where TContainer : ScreenContainer
         {
             var root = new GameObject(
                   layerConfig.name
@@ -179,10 +193,10 @@ namespace ZBase.UnityScreenNavigator.Core.Screens
             rectTransform.pivot = new Vector2(0.5f, 0.5f);
             rectTransform.localPosition = Vector3.zero;
 
-            var container = root.AddComponent<ScreenContainer>();
+            var container = root.GetOrAddComponent<TContainer>();
             container.Initialize(layerConfig, manager, settings);
 
-            s_instancesCacheByName.Add(container.LayerName, container);
+            s_instancesCacheByName.TryAdd(container.LayerName, container);
             return container;
         }
 

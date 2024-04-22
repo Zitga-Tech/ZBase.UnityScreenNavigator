@@ -181,13 +181,27 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
         }
 
         /// <summary>
-        /// Create a new <see cref="ModalContainer" /> as a layer.
+        /// Create a new instance of <see cref="ModalContainer"/> as a layer.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ModalContainer Create(
               WindowContainerConfig layerConfig
             , IWindowContainerManager manager
             , UnityScreenNavigatorSettings settings
         )
+        {
+            return Create<ModalContainer>(layerConfig, manager, settings);
+        }
+
+        /// <summary>
+        /// Create a new instance of <typeparamref name="TContainer"/> as a layer.
+        /// </summary>
+        public static TContainer Create<TContainer>(
+              WindowContainerConfig layerConfig
+            , IWindowContainerManager manager
+            , UnityScreenNavigatorSettings settings
+        )
+            where TContainer : ModalContainer
         {
             var root = new GameObject(
                   layerConfig.name
@@ -204,10 +218,10 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
             rectTransform.pivot = new Vector2(0.5f, 0.5f);
             rectTransform.localPosition = Vector3.zero;
 
-            var container = root.AddComponent<ModalContainer>();
+            var container = root.GetOrAddComponent<TContainer>();
             container.Initialize(layerConfig, manager, settings);
 
-            s_instancesCachedByName.Add(container.LayerName, container);
+            s_instancesCachedByName.TryAdd(container.LayerName, container);
             return container;
         }
 
