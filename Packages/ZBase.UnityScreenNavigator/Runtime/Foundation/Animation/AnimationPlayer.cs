@@ -2,23 +2,23 @@
 
 namespace ZBase.UnityScreenNavigator.Foundation.Animation
 {
-    internal class AnimationPlayer : IUpdatable
+    internal struct AnimationPlayer : IUpdatable
     {
-        public AnimationPlayer() { }
-
-        public IAnimation Animation { get; private set; }
+        public IAnimation Animation { get; }
 
         public bool IsPlaying { get; private set; }
 
         public float Time { get; private set; }
 
-        public bool IsFinished => Time >= Animation.Duration;
+        public readonly bool IsFinished => Time >= Animation.Duration;
 
-        public void Initialize(IAnimation animation)
+        public AnimationPlayer(IAnimation animation)
         {
             Animation = animation;
-            IsPlaying = default;
-            SetTime(0.0f);
+            IsPlaying = false;
+
+            var time = Math.Max(0, Math.Min(animation.Duration, 0f));
+            animation.SetTime(Time = time);
         }
 
         public void Update(float deltaTime)

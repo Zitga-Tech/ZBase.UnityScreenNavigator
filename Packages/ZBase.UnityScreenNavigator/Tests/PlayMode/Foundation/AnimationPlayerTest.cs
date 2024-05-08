@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using ZBase.UnityScreenNavigator.Foundation;
 using ZBase.UnityScreenNavigator.Foundation.Animation;
 
 namespace ZBase.UnityScreenNavigator.Tests.PlayMode.Foundation
@@ -11,8 +10,7 @@ namespace ZBase.UnityScreenNavigator.Tests.PlayMode.Foundation
         {
             const float duration = 1.0f;
             var animation = new FakeAnimation(duration);
-            var player = Pool<AnimationPlayer>.Shared.Rent();
-            player.Initialize(animation);
+            var player = new AnimationPlayer(animation);
             player.Play();
             Assert.That(animation.Progress, Is.EqualTo(0.0f));
             player.Update(0.1f);
@@ -24,8 +22,7 @@ namespace ZBase.UnityScreenNavigator.Tests.PlayMode.Foundation
         {
             const float duration = 1.0f;
             var animation = new FakeAnimation(duration);
-            var player = Pool<AnimationPlayer>.Shared.Rent();
-            player.Initialize(animation);
+            var player = new AnimationPlayer(animation);
             Assert.That(animation.Progress, Is.EqualTo(0.0f));
             player.Update(0.1f);
             Assert.That(animation.Progress, Is.EqualTo(0.0f));
@@ -36,8 +33,7 @@ namespace ZBase.UnityScreenNavigator.Tests.PlayMode.Foundation
         {
             const float duration = 1.0f;
             var animation = new FakeAnimation(duration);
-            var player = Pool<AnimationPlayer>.Shared.Rent();
-            player.Initialize(animation);
+            var player = new AnimationPlayer(animation);
             player.Play();
             Assert.That(animation.Progress, Is.EqualTo(0.0f));
             player.Update(0.1f);
@@ -52,8 +48,7 @@ namespace ZBase.UnityScreenNavigator.Tests.PlayMode.Foundation
         {
             const float duration = 1.0f;
             var animation = new FakeAnimation(duration);
-            var player = Pool<AnimationPlayer>.Shared.Rent();
-            player.Initialize(animation);
+            var player = new AnimationPlayer(animation);
             player.Play();
             Assert.That(animation.Progress, Is.EqualTo(0.0f));
             player.Update(0.1f);
@@ -67,8 +62,7 @@ namespace ZBase.UnityScreenNavigator.Tests.PlayMode.Foundation
         {
             const float duration = 1.0f;
             var animation = new FakeAnimation(duration);
-            var player = Pool<AnimationPlayer>.Shared.Rent();
-            player.Initialize(animation);
+            var player = new AnimationPlayer(animation);
             player.SetTime(0.3f);
             Assert.That(animation.Progress, Is.EqualTo(0.3f));
         }
@@ -78,8 +72,7 @@ namespace ZBase.UnityScreenNavigator.Tests.PlayMode.Foundation
         {
             const float duration = 1.0f;
             var animation = new FakeAnimation(duration);
-            var player = Pool<AnimationPlayer>.Shared.Rent();
-            player.Initialize(animation);
+            var player = new AnimationPlayer(animation);
             player.SetTime(-1f);
             Assert.That(animation.Progress, Is.EqualTo(0.0f));
         }
@@ -89,8 +82,7 @@ namespace ZBase.UnityScreenNavigator.Tests.PlayMode.Foundation
         {
             const float duration = 1.0f;
             var animation = new FakeAnimation(duration);
-            var player = Pool<AnimationPlayer>.Shared.Rent();
-            player.Initialize(animation);
+            var player = new AnimationPlayer(animation);
             player.SetTime(float.MaxValue);
             Assert.That(animation.Progress, Is.EqualTo(1.0f));
         }
@@ -100,8 +92,7 @@ namespace ZBase.UnityScreenNavigator.Tests.PlayMode.Foundation
         {
             const float duration = 1.0f;
             var animation = new FakeAnimation(duration);
-            var player = Pool<AnimationPlayer>.Shared.Rent();
-            player.Initialize(animation);
+            var player = new AnimationPlayer(animation);
             player.SetTime(float.MaxValue);
             Assert.That(player.IsFinished, Is.True);
         }

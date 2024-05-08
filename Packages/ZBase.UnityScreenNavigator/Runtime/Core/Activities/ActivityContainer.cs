@@ -542,17 +542,21 @@ namespace ZBase.UnityScreenNavigator.Core.Activities
         /// <remarks>Asynchronous</remarks>
         public async UniTask HideAllAsync(bool playAnimation = true)
         {
-            var keys = Pool<List<string>>.Shared.Rent();
-            keys.AddRange(_activities.Keys);
+            var activities = _activities;
+            var keys = new List<string>(activities.Count);
+            var tasks = new List<UniTask>(activities.Count);
+
+            keys.AddRange(activities.Keys);
 
             var count = keys.Count;
 
             for (var i = 0; i < count; i++)
             {
-                await HideAsync(keys[i], playAnimation);
+                var task = HideAsync(keys[i], playAnimation);
+                tasks.Add(task);
             }
 
-            Pool<List<string>>.Shared.Return(keys);
+            await UniTask.WhenAll(tasks);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using ZBase.UnityScreenNavigator.Foundation;
 using ZBase.UnityScreenNavigator.Foundation.Animation;
 
 namespace ZBase.UnityScreenNavigator.Core
@@ -17,8 +16,7 @@ namespace ZBase.UnityScreenNavigator.Core
     {
         public static async UniTask PlayAsync(this ITransitionAnimation self, IProgress<float> progress = null)
         {
-            var player = Pool<AnimationPlayer>.Shared.Rent();
-            player.Initialize(self);
+            var player = new AnimationPlayer(self);
 
             progress?.Report(0.0f);
             player.Play();
@@ -26,11 +24,10 @@ namespace ZBase.UnityScreenNavigator.Core
             while (player.IsFinished == false)
             {
                 await UniTask.NextFrame();
+
                 player.Update(Time.unscaledDeltaTime);
                 progress?.Report(player.Time / self.Duration);
             }
-
-            Pool<AnimationPlayer>.Shared.Return(player);
         }
     }
 }
