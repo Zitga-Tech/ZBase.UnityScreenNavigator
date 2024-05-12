@@ -145,7 +145,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
             await WaitForAsync(tasks);
         }
 
-        internal async UniTask EnterAsync(bool push, bool playAnimation, Modal partnerModal)
+        internal async UniTask<StubEnter> EnterAsync(bool push, bool playAnimation, Modal partnerModal)
         {
             if (push)
             {
@@ -168,6 +168,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
             }
 
             SetTransitionProgress(1.0f);
+            return default;
         }
 
         internal void AfterEnter(bool push, Memory<object> args)
@@ -212,7 +213,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
             await WaitForAsync(tasks);
         }
 
-        internal async UniTask ExitAsync(bool push, bool playAnimation, Modal partnerModal)
+        internal async UniTask<StubExit> ExitAsync(bool push, bool playAnimation, Modal partnerModal)
         {
             if (push == false)
             {
@@ -233,6 +234,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
             }
 
             SetTransitionProgress(1.0f);
+            return default;
         }
 
         internal void AfterExit(bool push, Memory<object> args)

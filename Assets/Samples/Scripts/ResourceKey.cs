@@ -3,6 +3,8 @@ namespace Demo.Scripts
     public static class ResourceKey
     {
         private const string PrefabFormat = "prefab_demo_{0}";
+        private const string ColorRedScreenPrefabName = "screen_color_red";
+        private const string ColorBlueScreenPrefabName = "screen_color_blue";
         private const string TopScreenPrefabName = "screen_top";
         private const string HomeScreenPrefabName = "screen_home";
         private const string HomeLoadingScreenPrefabName = "screen_home_loading";
@@ -18,6 +20,16 @@ namespace Demo.Scripts
         private const string CharacterImageFormat = "tex_character_{0:D3}_{1}";
         private const string CharacterThumbnailFormat = "tex_character_thumb_{0:D3}_{1}";
 
+        public static string ColorRedScreenPrefab()
+        {
+            return string.Format(PrefabFormat, ColorRedScreenPrefabName);
+        }
+        
+        public static string ColorBlueScreenPrefab()
+        {
+            return string.Format(PrefabFormat, ColorBlueScreenPrefabName);
+        }
+        
         public static string TopScreenPrefab()
         {
             return string.Format(PrefabFormat, TopScreenPrefabName);

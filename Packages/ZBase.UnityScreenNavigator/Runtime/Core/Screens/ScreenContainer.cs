@@ -394,12 +394,13 @@ namespace ZBase.UnityScreenNavigator.Core.Screens
             await enterScreen.BeforeEnterAsync(true, args);
 
             // Play Animations
-            if (exitScreen)
-            {
-                await exitScreen.ExitAsync(true, options.options.playAnimation, enterScreen);
-            }
+            var animExit = exitScreen
+                ? exitScreen.ExitAsync(true, options.options.playAnimation, enterScreen)
+                : default;
 
-            await enterScreen.EnterAsync(true, options.options.playAnimation, exitScreen);
+            var animEnter = enterScreen.EnterAsync(true, options.options.playAnimation, exitScreen);
+
+            await UniTask.WhenAll(animExit, animEnter);
 
             // End Transition
             if (_isActiveScreenStacked == false && exitScreenId.HasValue)
@@ -581,12 +582,13 @@ namespace ZBase.UnityScreenNavigator.Core.Screens
             await enterScreen.BeforeEnterAsync(true, args);
 
             // Play Animations
-            if (exitScreen)
-            {
-                await exitScreen.ExitAsync(true, options.options.playAnimation, enterScreen);
-            }
+            var animExit = exitScreen
+                ? exitScreen.ExitAsync(true, options.options.playAnimation, enterScreen)
+                : default;
 
-            await enterScreen.EnterAsync(true, options.options.playAnimation, exitScreen);
+            var animEnter = enterScreen.EnterAsync(true, options.options.playAnimation, exitScreen);
+
+            await UniTask.WhenAll(animExit, animEnter);
 
             // End Transition
             if (_isActiveScreenStacked == false && exitScreenId.HasValue)
@@ -719,12 +721,13 @@ namespace ZBase.UnityScreenNavigator.Core.Screens
             }
 
             // Play Animations
-            await exitScreen.ExitAsync(false, playAnimation, enterScreen);
+            var animExit = exitScreen.ExitAsync(false, playAnimation, enterScreen);
 
-            if (enterScreen)
-            {
-                await enterScreen.EnterAsync(false, playAnimation, exitScreen);
-            }
+            var animEnter = enterScreen
+                ? enterScreen.EnterAsync(false, playAnimation, exitScreen)
+                : default;
+
+            await UniTask.WhenAll(animExit, animEnter);
 
             // End Transition
             _screens.RemoveAt(lastScreen);

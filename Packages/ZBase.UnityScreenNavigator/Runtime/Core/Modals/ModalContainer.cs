@@ -447,17 +447,17 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
 
             // Play Animation
 
-            if (backdrop.HasValue && backdrop.Value.View)
-            {
-                await backdrop.Value.View.EnterAsync(options.options.playAnimation);
-            }
+            var animBackdrop = backdrop.HasValue && backdrop.Value.View
+                ? backdrop.Value.View.EnterAsync(options.options.playAnimation)
+                : default;
 
-            if (exitModal)
-            {
-                await exitModal.ExitAsync(true, options.options.playAnimation, enterModal);
-            }
+            var animExit = exitModal
+                ? exitModal.ExitAsync(true, options.options.playAnimation, enterModal)
+                : default;
 
-            await enterModal.EnterAsync(true, options.options.playAnimation, exitModal);
+            var animEnter = enterModal.EnterAsync(true, options.options.playAnimation, exitModal);
+
+            await UniTask.WhenAll(animBackdrop, animExit, animEnter);
 
             // End Transition
             _modals.Add(new ViewRef<Modal>(enterModal, resourcePath, options.options.poolingPolicy));
@@ -640,17 +640,17 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
 
             // Play Animation
 
-            if (backdrop)
-            {
-                await backdrop.EnterAsync(options.options.playAnimation);
-            }
+            var animBackdrop = backdrop
+                ? backdrop.EnterAsync(options.options.playAnimation)
+                : default;
 
-            if (exitModal)
-            {
-                await exitModal.ExitAsync(true, options.options.playAnimation, enterModal);
-            }
+            var animExit = exitModal
+                ? exitModal.ExitAsync(true, options.options.playAnimation, enterModal)
+                : default;
 
-            await enterModal.EnterAsync(true, options.options.playAnimation, exitModal);
+            var animEnter = enterModal.EnterAsync(true, options.options.playAnimation, exitModal);
+
+            await UniTask.WhenAll(animBackdrop, animExit, animEnter);
 
             // End Transition
             _modals.Add(new ViewRef<Modal>(enterModal, resourcePath, options.options.poolingPolicy));
@@ -780,17 +780,17 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
             }
 
             // Play Animation
-            await exitModal.ExitAsync(false, playAnimation, enterModal);
+            var animExit =  exitModal.ExitAsync(false, playAnimation, enterModal);
 
-            if (enterModal != null)
-            {
-                await enterModal.EnterAsync(false, playAnimation, exitModal);
-            }
+            var animEnter = enterModal != null
+                ? enterModal.EnterAsync(false, playAnimation, exitModal)
+                : default;
 
-            if (backdrop.HasValue && backdrop.Value.View)
-            {
-                await backdrop.Value.View.ExitAsync(playAnimation);
-            }
+            var animBackdrop = backdrop.HasValue && backdrop.Value.View
+                ? backdrop.Value.View.ExitAsync(playAnimation)
+                : default;
+
+            await UniTask.WhenAll(animExit, animEnter, animBackdrop);
 
             // End Transition
             _modals.RemoveAt(lastModalIndex);

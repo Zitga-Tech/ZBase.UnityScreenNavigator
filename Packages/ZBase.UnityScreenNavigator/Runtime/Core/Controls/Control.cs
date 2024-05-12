@@ -124,20 +124,20 @@ namespace ZBase.UnityScreenNavigator.Core.Controls
             RectTransform.SetParentRect(Parent);
         }
 
-        internal async UniTask EnterAsync(bool playAnimation, Control partnerControl)
+        internal async UniTask<StubEnter> EnterAsync(bool playAnimation, Control partnerControl)
         {
             OnEnter();
 
             if (playAnimation == false)
             {
-                return;
+                return default;
             }
 
             var anim = GetAnimation(true, partnerControl);
 
             if (anim == null)
             {
-                return;
+                return default;
             }
 
             if (partnerControl)
@@ -148,6 +148,8 @@ namespace ZBase.UnityScreenNavigator.Core.Controls
             anim.Setup(RectTransform);
 
             await anim.PlayAsync(TransitionProgressReporter);
+
+            return default;
         }
 
         protected virtual void OnEnter() { }
@@ -180,18 +182,18 @@ namespace ZBase.UnityScreenNavigator.Core.Controls
             RectTransform.SetParentRect(Parent);
         }
 
-        internal async UniTask ExitAsync(bool playAnimation, Control partnerControl)
+        internal async UniTask<StubExit> ExitAsync(bool playAnimation, Control partnerControl)
         {
             if (playAnimation == false)
             {
-                return;
+                return default;
             }
 
             var anim = GetAnimation(false, partnerControl);
 
             if (anim == null)
             {
-                return;
+                return default;
             }
 
             if (partnerControl)
@@ -202,6 +204,8 @@ namespace ZBase.UnityScreenNavigator.Core.Controls
             anim.Setup(RectTransform);
 
             await anim.PlayAsync(TransitionProgressReporter);
+
+            return default;
         }
 
         protected virtual void OnExit() { }

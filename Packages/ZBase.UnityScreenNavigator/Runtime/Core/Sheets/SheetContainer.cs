@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using ZBase.UnityScreenNavigator.Core.Controls;
+using ZBase.UnityScreenNavigator.Foundation;
 
 namespace ZBase.UnityScreenNavigator.Core.Sheets
 {
@@ -336,12 +337,13 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
             await enterSheet.BeforeEnterAsync(args);
 
             // Play Animation
-            if (exitSheet)
-            {
-                await exitSheet.ExitAsync(playAnimation, enterSheet);
-            }
+            var animExit = exitSheet
+                ? exitSheet.ExitAsync(playAnimation, enterSheet)
+                : default;
 
-            await enterSheet.EnterAsync(playAnimation, exitSheet);
+            var animEnter = enterSheet.EnterAsync(playAnimation, exitSheet);
+
+            await UniTask.WhenAll(animExit, animEnter);
 
             // End Transition
             _activeSheetId = sheetId;

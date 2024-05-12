@@ -73,6 +73,14 @@ MonoBehaviour:
     m_Address: prefab_demo_control_shop_item
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 92b353aa43b30e8468ff7479b13e76c5
+    m_Address: prefab_demo_screen_color_blue
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 4f7351fb35d654840a7f8d2ee4c5b992
+    m_Address: prefab_demo_screen_color_red
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 14e8abed4060b0049808bf147e88b0b5, type: 2}
   m_SchemaSet:

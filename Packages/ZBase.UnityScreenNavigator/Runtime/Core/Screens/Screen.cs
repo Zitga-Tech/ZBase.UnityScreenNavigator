@@ -163,7 +163,7 @@ namespace ZBase.UnityScreenNavigator.Core.Screens
             await WaitForAsync(tasks);
         }
 
-        internal async UniTask EnterAsync(bool push, bool playAnimation, Screen partnerScreen)
+        internal async UniTask<StubEnter> EnterAsync(bool push, bool playAnimation, Screen partnerScreen)
         {
             Alpha = 1.0f;
 
@@ -183,6 +183,7 @@ namespace ZBase.UnityScreenNavigator.Core.Screens
 
             RectTransform.FillParent(Parent);
             SetTransitionProgress(1.0f);
+            return default;
         }
 
         internal void AfterEnter(bool push, Memory<object> args)
@@ -226,7 +227,7 @@ namespace ZBase.UnityScreenNavigator.Core.Screens
             await WaitForAsync(tasks);
         }
 
-        internal async UniTask ExitAsync(bool push, bool playAnimation, Screen partnerScreen)
+        internal async UniTask<StubExit> ExitAsync(bool push, bool playAnimation, Screen partnerScreen)
         {
             if (playAnimation)
             {
@@ -244,6 +245,7 @@ namespace ZBase.UnityScreenNavigator.Core.Screens
             
             Alpha = 0.0f;
             SetTransitionProgress(1.0f);
+            return default;
         }
 
         internal void AfterExit(bool push, Memory<object> args)

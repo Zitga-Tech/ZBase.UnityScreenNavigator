@@ -105,7 +105,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
             modalContainer.Pop(true);
         }
 
-        internal async UniTask EnterAsync(bool playAnimation)
+        internal async UniTask<StubEnter> EnterAsync(bool playAnimation)
         {
             gameObject.SetActive(true);
             RectTransform.FillParent(Parent);
@@ -120,9 +120,10 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
             }
 
             RectTransform.FillParent(Parent);
+            return default;
         }
 
-        internal async UniTask ExitAsync(bool playAnimation)
+        internal async UniTask<StubEnter> ExitAsync(bool playAnimation)
         {
             gameObject.SetActive(true);
             RectTransform.FillParent(Parent);
@@ -138,6 +139,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
 
             CanvasGroup.alpha = 0f;
             gameObject.SetActive(false);
+            return default;
         }
 
         private ITransitionAnimation GetAnimation(bool enter)
