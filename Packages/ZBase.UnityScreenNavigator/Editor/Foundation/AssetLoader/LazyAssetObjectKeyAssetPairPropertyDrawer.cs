@@ -5,8 +5,8 @@ using ZBase.UnityScreenNavigator.Foundation.AssetLoaders;
 
 namespace ZBase.UnityScreenNavigator.Editor.Foundation.AssetLoader
 {
-    [CustomPropertyDrawer(typeof(PreloadedAssetLoaderObject.KeyAssetPair))]
-    internal sealed class PreloadedAssetObjectKeyAssetPairPropertyDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(LazyAssetLoaderObject.KeyAssetPair))]
+    internal sealed class LazyAssetObjectKeyAssetPairPropertyDrawer : PropertyDrawer
     {
         private readonly Dictionary<string, PropertyData> _dataList = new();
         private PropertyData _property;
@@ -18,7 +18,7 @@ namespace ZBase.UnityScreenNavigator.Editor.Foundation.AssetLoader
             _property = new PropertyData {
                 KeySourceProperty = property.FindPropertyRelative("_keySource"),
                 KeyProperty = property.FindPropertyRelative("_key"),
-                AssetProperty = property.FindPropertyRelative("_asset")
+                AssetProperty = property.FindPropertyRelative("_asset"),
             };
 
             _dataList.Add(property.propertyPath, _property);
@@ -42,6 +42,12 @@ namespace ZBase.UnityScreenNavigator.Editor.Foundation.AssetLoader
                         EditorGUI.PropertyField(new Rect(fieldRect), _property.KeySourceProperty);
 
                         var keySource = (KeySourceType)_property.KeySourceProperty.intValue;
+
+                        if (keySource == KeySourceType.AssetName)
+                        {
+                            AssignAssetNameToKey(_property);
+                        }
+
                         GUI.enabled = keySource == KeySourceType.InputField;
                         fieldRect.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
                         EditorGUI.PropertyField(new Rect(fieldRect), _property.KeyProperty);
@@ -63,6 +69,16 @@ namespace ZBase.UnityScreenNavigator.Editor.Foundation.AssetLoader
                 height += (EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing) * 3;
 
             return height;
+        }
+
+        private static void AssignAssetNameToKey(PropertyData data)
+        {
+            var obj = data.AssetProperty.objectReferenceValue;
+
+            if (obj)
+            {
+                data.KeyProperty.stringValue = obj.name;
+            }
         }
 
         private class PropertyData

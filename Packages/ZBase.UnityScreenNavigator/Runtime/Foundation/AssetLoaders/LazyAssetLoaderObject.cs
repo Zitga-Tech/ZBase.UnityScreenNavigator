@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -7,19 +7,19 @@ using Object = UnityEngine.Object;
 
 namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
 {
-    [CreateAssetMenu(fileName = "PreloadedAssetLoader", menuName = "Screen Navigator/Loaders/Preloaded Asset Loader")]
-    public sealed class PreloadedAssetLoaderObject : AssetLoaderObject, IAssetLoader, IInitializable, IDeinitializable
+    [CreateAssetMenu(fileName = "LazyAssetLoader", menuName = "Screen Navigator/Loaders/Lazy Asset Loader")]
+    public sealed class LazyAssetLoaderObject : AssetLoaderObject, IAssetLoader, IInitializable, IDeinitializable
     {
-        [SerializeField] private List<KeyAssetPair> _preloadedObjects = new();
+        [SerializeField] private List<KeyAssetPair> _lazyObjects = new();
 
-        private readonly PreloadedAssetLoader _loader = new();
+        private readonly LazyAssetLoader _loader = new();
 
-        public List<KeyAssetPair> PreloadedObjects => _preloadedObjects;
+        public List<KeyAssetPair> LazyObjects => _lazyObjects;
 
         public void Initialize()
         {
-            var src = _preloadedObjects;
-            var dest = _loader.preloadedObjects;
+            var src = _lazyObjects;
+            var dest = _loader.lazyObjects;
             dest.Clear();
 
             var count = src.Count;
@@ -37,7 +37,7 @@ namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
 
                 var asset = preloadedObject.Asset;
 
-                if (asset == false)
+                if (asset.instanceID == default)
                 {
                     ErrorIfAssetIsNull(i, this);
                     continue;
@@ -52,7 +52,8 @@ namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
 
         public void Deinitialize()
         {
-            _loader.preloadedObjects.Clear();
+            _loader.lazyObjects.Clear();
+            _loader.loadedObjects.Clear();
         }
 
         public override AssetLoadHandle<T> Load<T>(string key)
@@ -81,7 +82,7 @@ namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
         {
             UnityEngine.Debug.LogError($"Asset at {index} is null", context);
         }
-        
+
         [HideInCallstack, DoesNotReturn, Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
         private static void ErrorIfDuplicate(int index, string key, UnityEngine.Object context)
         {
@@ -93,7 +94,7 @@ namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
         {
             [SerializeField] private KeySourceType _keySource;
             [SerializeField] private string _key;
-            [SerializeField] private Object _asset;
+            [SerializeField] private LazyLoadReference<Object> _asset;
 
             public KeySourceType KeySource
             {
@@ -103,22 +104,14 @@ namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
 
             public string Key
             {
-                readonly get => GetKey();
+                readonly get => _key;
                 set => _key = value;
             }
 
-            public Object Asset
+            public LazyLoadReference<Object> Asset
             {
                 readonly get => _asset;
                 set => _asset = value;
-            }
-
-            private readonly string GetKey()
-            {
-                if (_keySource == KeySourceType.AssetName)
-                    return _asset == false ? "" : _asset.name;
-
-                return _key;
             }
         }
     }
