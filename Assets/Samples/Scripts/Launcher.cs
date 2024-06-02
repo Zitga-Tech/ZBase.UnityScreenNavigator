@@ -17,6 +17,8 @@ namespace Demo.Scripts
 
         protected override void OnPostCreateContainers()
         {
+            UnityScreenNavigatorSettings.Initialize();
+
             ShowTopPage().Forget();
         }
 

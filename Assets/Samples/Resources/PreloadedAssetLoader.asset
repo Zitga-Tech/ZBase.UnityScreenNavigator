@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdffd462341eb72448888e016f82b858, type: 3}
+  m_Name: PreloadedAssetLoader
+  m_EditorClassIdentifier: 
+  _preloadedObjects:
+  - _keySource: 0
+    _key: 
+    _asset: {fileID: 4940130503677273804, guid: 4f7f006083f13274ba4e4cc773e5573d,
+      type: 3}
+  - _keySource: 0
+    _key: 
+    _asset: {fileID: 261370515301404, guid: 534a91b10378bae4daabfc536d65b4b2, type: 3}
+  - _keySource: 0
+    _key: 
+    _asset: {fileID: 10873971380156999, guid: 425be9792a5dd344fade18732f6504b8, type: 3}
+  - _keySource: 0
+    _key: 
+    _asset: {fileID: 78457337265729854, guid: 30228440436e2a248b41c61d678f615e, type: 3}
+  - _keySource: 0
+    _key: 
+    _asset: {fileID: 4609740367533392799, guid: 786432917d114ba4b96bf12fa7dfd624,
+      type: 3}
+  - _keySource: 0
+    _key: 
+    _asset: {fileID: 7706935734314811393, guid: e7cce3b284923c84b941203f7a850ee5,
+      type: 3}
+  - _keySource: 0
+    _key: 
+    _asset: {fileID: 1616405201594747124, guid: 8f167764463a048ff940a7ca52a4baf5,
+      type: 3}
+  - _keySource: 0
+    _key: 
+    _asset: {fileID: 7483233304985610133, guid: a8e2c318f514aa342b98505ce1891ea2,
+      type: 3}
+  - _keySource: 0
+    _key: 
+    _asset: {fileID: 5870516614766070707, guid: 92b353aa43b30e8468ff7479b13e76c5,
+      type: 3}
+  - _keySource: 0
+    _key: 
+    _asset: {fileID: 2322034664130360409, guid: 4f7351fb35d654840a7f8d2ee4c5b992,
+      type: 3}
+  - _keySource: 0
+    _key: 
+    _asset: {fileID: 704286536919806819, guid: ff4464df59e5fb5419fe330a2515b135, type: 3}
+  - _keySource: 0
+    _key: 
+    _asset: {fileID: 8644593960100687338, guid: 7b90dc258f4919a4d8cb0b6cf8db9382,
+      type: 3}
+  - _keySource: 0
+    _key: 
+    _asset: {fileID: 477813369112430173, guid: 6a76cb4eb62fd5747831e0071cd8f07b, type: 3}
+  - _keySource: 0
+    _key: 
+    _asset: {fileID: 8617876258132873200, guid: 26a0b40ffde6c4c48b92681d4c7c6dde,
+      type: 3}
+  - _keySource: 0
+    _key: 
+    _asset: {fileID: 8953087645951095503, guid: 5974adbc7566e4544b02a51822ff58b0,
+      type: 3}
+  - _keySource: 0
+    _key: 
+    _asset: {fileID: 8149422562250073977, guid: 032047f25292f2540b40b2d3c21d0605,
+      type: 3}
