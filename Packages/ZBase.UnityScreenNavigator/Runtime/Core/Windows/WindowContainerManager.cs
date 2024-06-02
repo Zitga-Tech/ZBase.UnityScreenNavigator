@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using ZBase.UnityScreenNavigator.Core.Views;
 using ZBase.UnityScreenNavigator.Foundation;
@@ -41,7 +43,7 @@ namespace ZBase.UnityScreenNavigator.Core.Windows
             if (TryFind<T>(out var container))
                 return container;
 
-            Debug.LogError($"Cannot find layer of type {typeof(T).Name}");
+            ErrorIfFoundNoContainer<T>();
             return default;
         }
 
@@ -50,7 +52,7 @@ namespace ZBase.UnityScreenNavigator.Core.Windows
             if (TryFind<T>(containerName, out var container))
                 return container;
 
-            Debug.LogError($"Cannot find layer {containerName}");
+            ErrorIfFoundNoContainer(containerName);
             return default;
         }
 
@@ -104,6 +106,18 @@ namespace ZBase.UnityScreenNavigator.Core.Windows
             }
 
             _containers.Clear();
+        }
+
+        [HideInCallstack, DoesNotReturn, Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        private static void ErrorIfFoundNoContainer<T>()
+        {
+            UnityEngine.Debug.LogError($"Cannot find any container of type {typeof(T)}");
+        }
+
+        [HideInCallstack, DoesNotReturn, Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        private static void ErrorIfFoundNoContainer(string containerName)
+        {
+            UnityEngine.Debug.LogError($"Cannot find by container by the name `{containerName}`");
         }
     }
 }

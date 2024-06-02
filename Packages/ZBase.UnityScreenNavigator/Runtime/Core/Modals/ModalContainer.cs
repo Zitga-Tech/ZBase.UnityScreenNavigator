@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -142,7 +144,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
                 return container;
             }
 
-            Debug.LogError($"Cannot find any parent {nameof(ModalContainer)} component", rectTransform);
+            ErrorCannotFindParent(rectTransform);
             return null;
         }
 
@@ -158,7 +160,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
                 return instance;
             }
 
-            Debug.LogError($"Cannot find any {nameof(ModalContainer)} by name `{containerName}`");
+            ErrorIfCannotFindContainer(containerName);
             return null;
         }
 
@@ -175,7 +177,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
                 return true;
             }
 
-            Debug.LogError($"Cannot find any {nameof(ModalContainer)} by name `{containerName}`");
+            ErrorIfCannotFindContainer(containerName);
             container = default;
             return false;
         }
@@ -585,7 +587,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
 
             if (IsInTransition)
             {
-                Debug.LogWarning("Cannot transition because there is a modal already in transition.");
+                ErrorIfCannotTransition();
                 return;
             }
 
@@ -725,13 +727,13 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
         {
             if (_modals.Count == 0)
             {
-                Debug.LogError("Cannot transition because there is no modal loaded on the stack.");
+                ErrorIfCannotTransitionBecauseNoModal();
                 return;
             }
 
             if (IsInTransition)
             {
-                Debug.LogWarning("Cannot transition because there is a modal already in transition.");
+                ErrorIfCannotTransition();
                 return;
             }
 
@@ -823,6 +825,30 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
             {
                 Interactable = true;
             }
+        }
+
+        [HideInCallstack, DoesNotReturn, Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        private static void ErrorCannotFindParent(RectTransform rectTransform)
+        {
+            UnityEngine.Debug.LogError($"Cannot find any parent {nameof(ModalContainer)} component", rectTransform);
+        }
+
+        [HideInCallstack, DoesNotReturn, Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        private static void ErrorIfCannotFindContainer(string containerName)
+        {
+            UnityEngine.Debug.LogError($"Cannot find any {nameof(ModalContainer)} by name `{containerName}`");
+        }
+
+        [HideInCallstack, DoesNotReturn, Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        private static void ErrorIfCannotTransition()
+        {
+            UnityEngine.Debug.LogError("Cannot transition because there is a modal already in transition.");
+        }
+
+        [HideInCallstack, DoesNotReturn, Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        private static void ErrorIfCannotTransitionBecauseNoModal()
+        {
+            UnityEngine.Debug.LogError("Cannot transition because there is no modal loaded on the stack.");
         }
     }
 }

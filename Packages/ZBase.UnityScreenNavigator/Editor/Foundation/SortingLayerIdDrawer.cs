@@ -3,14 +3,15 @@ using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using ZBase.UnityScreenNavigator.Foundation;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ZBase.UnityScreenNavigator.Editor.Foundation
 {
     [CustomPropertyDrawer(typeof(SortingLayerId), true)]
     public class SortingLayerIdDrawer : PropertyDrawer
     {
-        private List<GUIContent> layerNames = new();
-        private List<int> layerValues = new();
+        private readonly List<GUIContent> layerNames = new();
+        private readonly List<int> layerValues = new();
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -20,7 +21,7 @@ namespace ZBase.UnityScreenNavigator.Editor.Foundation
 
             if (valueProperty == null)
             {
-                Debug.LogWarning("Could not find the layer index property, was it renamed or removed?");
+                WarningIfValuePropertyNull();
                 return;
             }
 
@@ -44,8 +45,8 @@ namespace ZBase.UnityScreenNavigator.Editor.Foundation
             }
 
             var tooltipAttribute = this.fieldInfo.GetCustomAttributes(typeof(TooltipAttribute), true)
-                                                 .Cast<TooltipAttribute>()
-                                                 .FirstOrDefault();
+                .Cast<TooltipAttribute>()
+                .FirstOrDefault();
 
             if (tooltipAttribute != null)
             {
@@ -66,6 +67,12 @@ namespace ZBase.UnityScreenNavigator.Editor.Foundation
                 layerValues.Add(layer.id);
                 layerNames.Add(new GUIContent(layer.name));
             }
+        }
+
+        [HideInCallstack, DoesNotReturn]
+        private static void WarningIfValuePropertyNull()
+        {
+            Debug.LogWarning("Could not find the layer index property, was it renamed or removed?");
         }
     }
 }

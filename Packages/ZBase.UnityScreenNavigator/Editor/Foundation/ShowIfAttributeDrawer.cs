@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using ZBase.UnityScreenNavigator.Foundation;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ZBase.UnityScreenNavigator.Editor.Foundation
 {
@@ -106,9 +107,15 @@ namespace ZBase.UnityScreenNavigator.Editor.Foundation
                     return sourcePropertyValue.objectReferenceValue == true;
 
                 default:
-                    Debug.LogError($"Data type of the property used for conditional hiding [{sourcePropertyValue.propertyType}] is currently not supported");
+                    ErrorIfNotSupported(sourcePropertyValue);
                     return true;
             }
+        }
+
+        [HideInCallstack, DoesNotReturn]
+        private static void ErrorIfNotSupported(SerializedProperty sourcePropertyValue)
+        {
+            Debug.LogError($"Data type of the property used for conditional hiding [{sourcePropertyValue.propertyType}] is currently not supported");
         }
     }
 }

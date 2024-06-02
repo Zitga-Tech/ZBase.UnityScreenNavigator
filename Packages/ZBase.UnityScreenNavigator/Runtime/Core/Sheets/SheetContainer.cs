@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using ZBase.UnityScreenNavigator.Core.Controls;
-using ZBase.UnityScreenNavigator.Foundation;
 
 namespace ZBase.UnityScreenNavigator.Core.Sheets
 {
@@ -295,13 +296,13 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
         {
             if (IsInTransition)
             {
-                Debug.LogError("Cannot transition because there is a sheet already in transition.");
+                ErrorIfCannotTransition();
                 return;
             }
 
             if (ActiveSheetId.HasValue && ActiveSheetId.Value.Equals(sheetId))
             {
-                Debug.LogWarning($"Cannot transition because the sheet {sheetId} is already active.");
+                WarningIfCannotTransitionBecauseActive(sheetId);
                 return;
             }
 
@@ -418,13 +419,13 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
         {
             if (IsInTransition)
             {
-                Debug.LogError("Cannot transition because there is a sheet already in transition.");
+                ErrorIfCannotTransition();
                 return;
             }
 
             if (ActiveSheetId.HasValue == false)
             {
-                Debug.LogWarning("Cannot transition because there is no active sheet.");
+                WarningIfCannotTransitionBecauseNoActive();
                 return;
             }
 
@@ -466,6 +467,24 @@ namespace ZBase.UnityScreenNavigator.Core.Sheets
             {
                 Interactable = true;
             }
+        }
+
+        [HideInCallstack, DoesNotReturn, Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        private static void ErrorIfCannotTransition()
+        {
+            UnityEngine.Debug.LogError("Cannot transition because there is a sheet already in transition.");
+        }
+
+        [HideInCallstack, DoesNotReturn, Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        private static void WarningIfCannotTransitionBecauseActive(int sheetId)
+        {
+            UnityEngine.Debug.LogWarning($"Cannot transition because the sheet {sheetId} is already active.");
+        }
+
+        [HideInCallstack, DoesNotReturn, Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        private static void WarningIfCannotTransitionBecauseNoActive()
+        {
+            UnityEngine.Debug.LogWarning("Cannot transition because there is no active sheet.");
         }
     }
 }

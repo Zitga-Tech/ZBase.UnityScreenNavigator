@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -173,7 +175,7 @@ namespace ZBase.UnityScreenNavigator.Core.Views
         {
             if (amount < 1)
             {
-                Debug.LogWarning($"The amount of preloaded view instances should be greater than 0.");
+                WarningIfAmountLesserThanOne();
                 return;
             }
 
@@ -217,11 +219,7 @@ namespace ZBase.UnityScreenNavigator.Core.Views
 
             if (instance.TryGetComponent<View>(out var view) == false)
             {
-                Debug.LogError(
-                    $"Cannot find the {typeof(View).Name} component on the specified resource `{resourcePath}`."
-                    , instance
-                );
-
+                ErrorIfFoundNoComponent(resourcePath, instance);
                 return;
             }
 
@@ -276,11 +274,7 @@ namespace ZBase.UnityScreenNavigator.Core.Views
 
             if (instance.TryGetComponent<T>(out var view) == false)
             {
-                Debug.LogError(
-                    $"Cannot find the {typeof(T).Name} component on the specified resource `{resourcePath}`."
-                    , instance
-                );
-
+                ErrorIfFoundNoComponent<T>(resourcePath, instance);
                 return null;
             }
 
@@ -394,6 +388,30 @@ namespace ZBase.UnityScreenNavigator.Core.Views
                 return true;
 
             return EnablePooling;
+        }
+
+        [HideInCallstack, DoesNotReturn, Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        private static void WarningIfAmountLesserThanOne()
+        {
+            UnityEngine.Debug.LogWarning($"The amount of preloaded view instances should be greater than 0.");
+        }
+
+        [HideInCallstack, DoesNotReturn, Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        private static void ErrorIfFoundNoComponent(string resourcePath, GameObject context)
+        {
+            UnityEngine.Debug.LogError(
+                $"Cannot find any component derived from {typeof(View)} on the specified resource `{resourcePath}`."
+                , context
+            );
+        }
+
+        [HideInCallstack, DoesNotReturn, Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        private static void ErrorIfFoundNoComponent<T>(string resourcePath, GameObject context)
+        {
+            UnityEngine.Debug.LogError(
+                $"Cannot find the {typeof(T)} component on the specified resource `{resourcePath}`."
+                , context
+            );
         }
     }
 }

@@ -88,7 +88,7 @@ namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
             private string GetKey()
             {
                 if (_keySource == KeySourceType.AssetName)
-                    return _asset == null ? "" : _asset.name;
+                    return _asset == false ? "" : _asset.name;
                 return _key;
             }
         }

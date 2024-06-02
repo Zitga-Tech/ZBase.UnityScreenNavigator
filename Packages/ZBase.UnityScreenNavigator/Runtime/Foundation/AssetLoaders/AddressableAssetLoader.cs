@@ -1,7 +1,10 @@
 ﻿#if USN_USE_ADDRESSABLES
 
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Object = UnityEngine.Object;
@@ -79,9 +82,7 @@ namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
             {
                 if (SuppressErrorLogOnRelease == false)
                 {
-                    UnityEngine.Debug.LogError(
-                        $"There is no asset that has been requested for release (Handle.Id: {handleId})."
-                    );
+                    ErrorIfFoundNoAsset(handleId);
                 }
 
                 return;
@@ -89,6 +90,12 @@ namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
 
             _controlIdToHandles.Remove(handleId);
             Addressables.Release(handle);
+        }
+
+        [HideInCallstack, DoesNotReturn, Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        private static void ErrorIfFoundNoAsset(AssetLoadHandleId handleId)
+        {
+            UnityEngine.Debug.LogError($"There is no asset that has been requested for release (Handle.Id: {handleId}).");
         }
     }
 }

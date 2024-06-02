@@ -21,10 +21,10 @@ namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
             var result = Resources.Load<T>(key);
             handle.SetResult(result);
 
-            var status = result != null ? AssetLoadStatus.Success : AssetLoadStatus.Failed;
+            var status = result ? AssetLoadStatus.Success : AssetLoadStatus.Failed;
             handle.SetStatus(status);
 
-            if (result == null)
+            if (result == false)
             {
                 var exception = new InvalidOperationException($"Requested asset（Key: {key}）was not found.");
                 handle.SetOperationException(exception);
@@ -49,10 +49,10 @@ namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
                 var result = req.asset as T;
                 handle.SetResult(result);
 
-                var status = result != null ? AssetLoadStatus.Success : AssetLoadStatus.Failed;
+                var status = result ? AssetLoadStatus.Success : AssetLoadStatus.Failed;
                 handle.SetStatus(status);
 
-                if (result == null)
+                if (result == false)
                 {
                     var exception = new InvalidOperationException($"Requested asset（Key: {key}）was not found.");
                     handle.SetOperationException(exception);
