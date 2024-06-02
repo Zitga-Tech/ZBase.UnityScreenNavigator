@@ -17,6 +17,10 @@ namespace ZBase.UnityScreenNavigator.Core
         [SerializeField, FormerlySerializedAs("containerLayerSettings")]
         private WindowContainerSettings windowContainerSettings;
 
+        public UnityScreenNavigatorSettings UnityScreenNavigatorSettings => unityScreenNavigatorSettings;
+
+        public WindowContainerSettings WindowContainerSettings => windowContainerSettings;
+
         protected sealed override void Awake()
         {
             if (unityScreenNavigatorSettings == false)
