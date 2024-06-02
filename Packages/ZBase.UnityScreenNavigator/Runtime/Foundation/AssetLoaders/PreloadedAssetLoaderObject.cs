@@ -75,40 +75,41 @@ namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
         }
 
         [Serializable]
-        public sealed class KeyAssetPair
+        public struct KeyAssetPair
         {
             public enum KeySourceType
             {
-                InputField,
-                AssetName
+                AssetName,
+                InputField
             }
 
-            [SerializeField] private KeySourceType _keySource = KeySourceType.AssetName;
+            [SerializeField] private KeySourceType _keySource;
             [SerializeField] private string _key;
             [SerializeField] private Object _asset;
 
             public KeySourceType KeySource
             {
-                get => _keySource;
+                readonly get => _keySource;
                 set => _keySource = value;
             }
 
             public string Key
             {
-                get => GetKey();
+                readonly get => GetKey();
                 set => _key = value;
             }
 
             public Object Asset
             {
-                get => _asset;
+                readonly get => _asset;
                 set => _asset = value;
             }
 
-            private string GetKey()
+            private readonly string GetKey()
             {
                 if (_keySource == KeySourceType.AssetName)
                     return _asset == false ? "" : _asset.name;
+
                 return _key;
             }
         }
