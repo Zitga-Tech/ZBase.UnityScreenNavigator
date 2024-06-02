@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
 {
     [CreateAssetMenu(fileName = "PreloadedAssetLoader", menuName = "Screen Navigator/Loaders/Preloaded Asset Loader")]
-    public sealed class PreloadedAssetLoaderObject : AssetLoaderObject, IAssetLoader
+    public sealed class PreloadedAssetLoaderObject : AssetLoaderObject, IAssetLoader, IInitializable, IDeinitializable
     {
         [SerializeField] private List<KeyAssetPair> _preloadedObjects = new();
 
@@ -14,29 +16,35 @@ namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
 
         public List<KeyAssetPair> PreloadedObjects => _preloadedObjects;
 
-        private void OnEnable()
+        public void Initialize()
         {
-            if (!Application.isPlaying)
-                return;
+            var src = _preloadedObjects;
+            var dest = _loader.preloadedObjects;
+            dest.Clear();
 
-            foreach (var preloadedObject in _preloadedObjects)
+            var count = src.Count;
+
+            for (var i = 0; i < count; i++)
             {
-                if (string.IsNullOrEmpty(preloadedObject.Key))
-                    continue;
+                var preloadedObject = src[i];
+                var key = preloadedObject.Key;
 
-                if (_loader.PreloadedObjects.ContainsKey(preloadedObject.Key))
+                if (string.IsNullOrEmpty(key))
+                {
+                    ErrorIfKeyIsNull(i, this);
                     continue;
+                }
 
-                _loader.PreloadedObjects.Add(preloadedObject.Key, preloadedObject.Asset);
+                if (dest.TryAdd(key, preloadedObject.Asset) == false)
+                {
+                    ErrorIfDuplicate(i, key, this);
+                }
             }
         }
 
-        private void OnDisable()
+        public void Deinitialize()
         {
-            if (!Application.isPlaying)
-                return;
-
-            _loader.PreloadedObjects.Clear();
+            _loader.preloadedObjects.Clear();
         }
 
         public override AssetLoadHandle<T> Load<T>(string key)
@@ -52,6 +60,18 @@ namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
         public override void Release(AssetLoadHandleId handleId)
         {
             _loader.Release(handleId);
+        }
+
+        [HideInCallstack, DoesNotReturn, Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        private static void ErrorIfKeyIsNull(int index, UnityEngine.Object context)
+        {
+            UnityEngine.Debug.LogError($"Object key at {index} is null or empty", context);
+        }
+        
+        [HideInCallstack, DoesNotReturn, Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        private static void ErrorIfDuplicate(int index, string key, UnityEngine.Object context)
+        {
+            UnityEngine.Debug.LogError($"Object at index {index} cannot be registered because the key `{key}` is already existing", context);
         }
 
         [Serializable]

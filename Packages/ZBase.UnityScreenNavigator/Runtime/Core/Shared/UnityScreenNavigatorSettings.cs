@@ -5,7 +5,7 @@ using ZBase.UnityScreenNavigator.Foundation.AssetLoaders;
 
 namespace ZBase.UnityScreenNavigator.Core
 {
-    public partial class UnityScreenNavigatorSettings : ScriptableObject
+    public partial class UnityScreenNavigatorSettings : ScriptableObject, IInitializable, IDeinitializable
     {
         private const string DEFAULT_MODAL_BACKDROP_PREFAB_KEY = "DefaultModalBackdrop";
 
@@ -198,6 +198,22 @@ namespace ZBase.UnityScreenNavigator.Core
         public ITransitionAnimation GetDefaultSheetTransitionAnimation(bool enter)
         {
             return enter ? SheetEnterAnimation : SheetExitAnimation;
+        }
+
+        public virtual void Initialize()
+        {
+            if (_assetLoader)
+            {
+                (_assetLoader as IInitializable)?.Initialize();
+            }
+        }
+
+        public virtual void Deinitialize()
+        {
+            if (_assetLoader)
+            {
+                (_assetLoader as IDeinitializable)?.Deinitialize();
+            }
         }
     }
 }
