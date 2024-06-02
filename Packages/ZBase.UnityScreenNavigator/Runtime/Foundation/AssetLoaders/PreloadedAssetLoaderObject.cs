@@ -35,7 +35,15 @@ namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
                     continue;
                 }
 
-                if (dest.TryAdd(key, preloadedObject.Asset) == false)
+                var asset = preloadedObject.Asset;
+
+                if (asset == false)
+                {
+                    ErrorIfAssetIsNull(i, this);
+                    continue;
+                }
+
+                if (dest.TryAdd(key, asset) == false)
                 {
                     ErrorIfDuplicate(i, key, this);
                 }
@@ -65,13 +73,19 @@ namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
         [HideInCallstack, DoesNotReturn, Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
         private static void ErrorIfKeyIsNull(int index, UnityEngine.Object context)
         {
-            UnityEngine.Debug.LogError($"Object key at {index} is null or empty", context);
+            UnityEngine.Debug.LogError($"Key at {index} is null or empty", context);
+        }
+
+        [HideInCallstack, DoesNotReturn, Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        private static void ErrorIfAssetIsNull(int index, UnityEngine.Object context)
+        {
+            UnityEngine.Debug.LogError($"Asset at {index} is null", context);
         }
         
         [HideInCallstack, DoesNotReturn, Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
         private static void ErrorIfDuplicate(int index, string key, UnityEngine.Object context)
         {
-            UnityEngine.Debug.LogError($"Object at index {index} cannot be registered because the key `{key}` is already existing", context);
+            UnityEngine.Debug.LogError($"Asset at index {index} cannot be registered because the key `{key}` is already existing", context);
         }
 
         [Serializable]
