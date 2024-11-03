@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &78457337265729855
 RectTransform:
   m_ObjectHideFlags: 0
@@ -90,6 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f61bcc81179c904d97880d6f8f5fdc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _dontAddCanvasGroupAutomatically: 0
   _usePrefabNameAsIdentifier: 1
   _identifier: 
   _rectTransform: {fileID: 78457337265729855}
@@ -104,6 +105,7 @@ MonoBehaviour:
       _animationBehaviour: {fileID: 0}
       _animationObject: {fileID: 0}
   _closeModalWhenClicked: 0
+  _graphic: {fileID: 0}
 --- !u!225 &3012687162618884780
 CanvasGroup:
   m_ObjectHideFlags: 0

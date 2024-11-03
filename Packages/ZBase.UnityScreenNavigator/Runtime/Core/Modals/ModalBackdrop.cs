@@ -11,8 +11,8 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
     {
         [SerializeField] private ModalBackdropTransitionAnimationContainer _animationContainer;
         [SerializeField] private bool _closeModalWhenClicked;
+        [SerializeField] private Graphic _graphic;
 
-        private Image _image;
         private float _originalAlpha;
 
         public ModalBackdropTransitionAnimationContainer AnimationContainer => _animationContainer;
@@ -21,8 +21,12 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
         {
             SetCloseModalOnClick(_closeModalWhenClicked);
 
-            _image = GetComponent<Image>();
-            _originalAlpha = _image ? _image.color.a : 1f;
+            if (_graphic == false)
+            {
+                _graphic = GetComponent<Graphic>();
+            }
+
+            _originalAlpha = _graphic ? _graphic.color.a : 1f;
         }
 
         public void Setup(
@@ -31,8 +35,8 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
             , in bool? closeModalWhenClick
         )
         {
-            SetAlpha(alpha);
             SetCloseModalOnClick(closeModalWhenClick);
+            SetAlpha(alpha);
 
             Parent = parent;
             RectTransform.FillParent(Parent);
@@ -43,9 +47,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
 
         private void SetAlpha(in float? value)
         {
-            var image = _image;
-
-            if (image == false)
+            if (_graphic == false)
             {
                 return;
             }
@@ -57,9 +59,9 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
                 alpha = value.Value;
             }
 
-            var color = image.color;
+            var color = _graphic.color;
             color.a = alpha;
-            image.color = color;
+            _graphic.color = color;
         }
 
         private void SetCloseModalOnClick(in bool? value)
@@ -69,14 +71,22 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
                 _closeModalWhenClicked = value.Value;
             }
 
+            if (_graphic == false)
+            {
+                if (TryGetComponent<Graphic>(out var graphic))
+                {
+                    _graphic = graphic;
+                }
+                else
+                {
+                    graphic = gameObject.AddComponent<Image>();
+                    graphic.color = Color.clear;
+                    _graphic = graphic;
+                }
+            }
+
             if (_closeModalWhenClicked)
             {
-                if (TryGetComponent<Image>(out var image) == false)
-                {
-                    image = gameObject.AddComponent<Image>();
-                    image.color = Color.clear;
-                }
-
                 if (TryGetComponent<Button>(out var button) == false)
                 {
                     button = gameObject.AddComponent<Button>();
@@ -115,7 +125,7 @@ namespace ZBase.UnityScreenNavigator.Core.Modals
             {
                 var anim = GetAnimation(true);
                 anim.Setup(RectTransform);
-                
+
                 await anim.PlayAsync();
             }
 
