@@ -24,7 +24,9 @@ namespace ZBase.UnityScreenNavigator.Foundation.AssetLoaders
         {
 #if ADDRESSABLES_1_17_4_OR_NEWER
             var addressableHandle = Addressables.LoadAssetAsync<T>(key);
-            var result = addressableHandle.WaitForCompletion();
+            var result = addressableHandle.IsDone
+                ? addressableHandle.Result
+                : addressableHandle.WaitForCompletion();
 
             var controlId = _nextControlId++;
             _controlIdToHandles.Add(controlId, addressableHandle);
