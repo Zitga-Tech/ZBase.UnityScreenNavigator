@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.cysharp.unitask": "2.5.3",
+    "com.cysharp.unitask": "2.5.10",
     "com.harumak.unityuiplayables": "https://github.com/Haruma-K/UnityUIPlayables.git?path=/Assets/UnityUIPlayables",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.addressables": "1.19.19",
