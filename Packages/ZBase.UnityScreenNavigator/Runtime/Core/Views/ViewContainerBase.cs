@@ -224,7 +224,7 @@ namespace ZBase.UnityScreenNavigator.Core.Views
             }
 
             view.Settings = Settings;
-            view.RectTransform.SetParent(PoolTransform);
+            view.RectTransform.SetParent(PoolTransform, false);
             view.Parent = PoolTransform;
             view.Owner.SetActive(false);
 
@@ -372,7 +372,7 @@ namespace ZBase.UnityScreenNavigator.Core.Views
                 return false;
             }
 
-            view.RectTransform.SetParent(PoolTransform);
+            view.RectTransform.SetParent(PoolTransform, false);
             view.Parent = PoolTransform;
             view.Owner.SetActive(false);
             pool.Enqueue(view);

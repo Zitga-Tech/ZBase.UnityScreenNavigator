@@ -24,7 +24,7 @@ namespace ZBase.UnityScreenNavigator.Foundation
             self.rotation = Quaternion.identity;
             self.localScale = Vector3.one;
         }
-        
+
         public static void RemoveChild(this Transform transform, Transform child, bool worldPositionStays = false)
         {
             if (child == false || !transform.Equals(child.parent))
